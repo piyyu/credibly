@@ -1,0 +1,22 @@
+{
+  "name": "@credibly/vc-core",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "typescript": "*",
+    "vitest": "^2.1.4"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.4",
+    "tweetnacl": "^1.0.3",
+    "bs58": "^6.0.0"
+  }
+}
