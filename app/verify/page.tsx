@@ -57,7 +57,13 @@ export default function VerifyPage() {
 
     try {
       const hashBuffer = hexToUint8Array(hashHex);
-      const pda = deriveCredentialPDA(hashBuffer);
+      let pda: any;
+
+      try {
+        pda = deriveCredentialPDA(hashBuffer);
+      } catch (err: any) {
+        throw new Error(err.message || "Invalid hash format");
+      }
 
       // Read-only provider setup
       const provider = new AnchorProvider(
@@ -83,7 +89,7 @@ export default function VerifyPage() {
       }
     } catch (err: any) {
       console.error(err);
-      setErrorMsg("Invalid hash format or network error.");
+      setErrorMsg(err.message || "Invalid hash format or network error.");
       setStatus("error");
     }
   };

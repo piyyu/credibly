@@ -6,8 +6,11 @@ export const PROGRAM_ID = new PublicKey(idlFile.address);
 export const PROGRAM_IDL: Idl = idlFile as any;
 
 export const deriveCredentialPDA = (hashBuffer: Uint8Array): PublicKey => {
+  if (hashBuffer.length !== 32) {
+    throw new Error("Invalid hash length: A SHA-256 hash must be exactly 32 bytes (64 hex characters).");
+  }
   return PublicKey.findProgramAddressSync(
-    [Buffer.from("credential"), hashBuffer],
+    [Buffer.from("credential"), Buffer.from(hashBuffer)],
     PROGRAM_ID
   )[0];
 };

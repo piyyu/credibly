@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/credential_registry.json`.
  */
 export type CredentialRegistry = {
-  "address": "E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU",
+  "address": "F4wFketKAQzZUTcHLET6QtRz9DYejhKVVdwwSLFcGB8C",
   "metadata": {
     "name": "credentialRegistry",
     "version": "0.1.0",
