@@ -91,71 +91,72 @@ export default function VerifyPage() {
 
       <div className="flex-1 flex flex-col items-center justify-start pt-6 overflow-y-auto custom-scrollbar">
 
-        <div className="w-full max-w-2xl stripe-panel p-8 md:p-12">
+        <div className="w-full max-w-2xl stripe-panel bg-[#151515] p-8 md:p-12 border-t-[#3b82f6] border-t-2 shadow-[0_10px_40px_rgba(0,0,0,1)]">
 
-          <div className="mb-10">
-            <div className="text-xs font-bold text-[#635bff] mb-2 uppercase tracking-wide">
-              Verification Engine
+          <div className="mb-10 text-center">
+            <div className="inline-flex items-center justify-center p-4 bg-[#0a0a0a] border border-[#262626] shadow-[inset_0_0_15px_rgba(0,0,0,1)] mb-6 mx-auto">
+              <span className="text-[#3b82f6] font-bold text-xl drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]">SYS_02</span>
             </div>
-            <h2 className="text-3xl font-bold text-[#0a2540] tracking-tight mb-3">Query blockchain state</h2>
-            <p className="text-[#425466] font-medium leading-relaxed">Instantly verify the integrity, origin, and validity status of any anchored document without revealing its contents.</p>
+            <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-3">Verification Matrix</h2>
+            <p className="text-[#a3a3a3] font-medium leading-relaxed max-w-[80%] mx-auto">Query the distributed ledger to cryptographically assert the validity state of any issued footprint.</p>
           </div>
 
           <div className="flex flex-col gap-6 pt-2">
 
             {scanActive ? (
-              <div className="overflow-hidden border border-[#e2e8f0] bg-white relative shadow-sm">
-                <div id="reader" className="[&_video]:!object-cover [&_video]:!w-full border-b border-[#e2e8f0]"></div>
+              <div className="border border-[#3b82f6] bg-[#000000] p-6 shadow-[0_0_30px_rgba(59,130,246,0.2)]">
+                <div className="text-[10px] font-bold text-[#3b82f6] uppercase mb-4 tracking-widest">Awaiting Video Input...</div>
+                <div id="reader" className="[&_video]:!object-cover [&_video]:!w-full border border-[#262626] mb-4"></div>
                 <button
                   onClick={() => setScanActive(false)}
-                  className="w-full bg-[#f8fafc] text-[#0a2540] hover:bg-[#e2e8f0] py-3 text-sm font-semibold transition-colors flex justify-center"
+                  className="w-full bg-[#151515] text-[#ef4444] border border-[#ef4444]/30 hover:border-[#ef4444] py-4 text-xs font-bold uppercase tracking-widest transition-colors shadow-[inset_0_0_15px_rgba(0,0,0,1)]"
                 >
-                  Cancel camera
+                  Terminate Scanner
                 </button>
               </div>
             ) : (
               <button
                 onClick={() => setScanActive(true)}
-                className="w-full border-2 border-dashed border-[#cbd5e1] hover:border-[#635bff] bg-[#f8fafc] hover:bg-[#f0f5ff] transition-colors py-8 flex flex-col items-center justify-center text-[#425466]"
+                className="w-full border-2 border-dashed border-[#262626] hover:border-[#3b82f6]/50 bg-[#0a0a0a] transition-all py-10 flex flex-col items-center justify-center text-[#737373] group/scan"
               >
-                <div className="w-10 h-10 bg-white border border-[#e2e8f0] shadow-sm flex items-center justify-center mb-3">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><rect x="7" y="7" width="10" height="10" /></svg>
+                <div className="w-14 h-14 bg-[#151515] border border-[#262626] shadow-[inset_0_0_15px_rgba(0,0,0,1)] flex items-center justify-center mb-6 group-hover/scan:text-[#3b82f6] group-hover/scan:border-[#3b82f6]/30 transition-colors">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><rect x="7" y="7" width="10" height="10" /></svg>
                 </div>
-                <div className="text-[14px] font-semibold text-[#0a2540]">Scan QR verification matrix</div>
-                <div className="text-[13px] text-[#64748b]">Requires camera hardware permission</div>
+                <div className="text-[14px] font-black text-white uppercase tracking-widest mb-2">Scan Hardware Payload</div>
+                <div className="text-[11px] text-[#737373] font-mono">Requires Device Camera Permissions</div>
               </button>
             )}
 
-            <div className="flex items-center gap-4 my-2">
-              <div className="flex-1 border-t border-[#e2e8f0]"></div>
-              <span className="text-[12px] font-semibold text-[#64748b] bg-white px-2">OR</span>
-              <div className="flex-1 border-t border-[#e2e8f0]"></div>
+            <div className="flex items-center gap-4 my-4">
+              <div className="flex-1 border-t border-[#262626]"></div>
+              <span className="text-[10px] font-bold text-[#737373] bg-[#151515] px-4 uppercase tracking-widest">Manual Override</span>
+              <div className="flex-1 border-t border-[#262626]"></div>
             </div>
 
-            <div>
-              <label className="label-premium">SHA-256 payload hash (hex string)</label>
+            <div className="p-6 bg-[#0a0a0a] border border-[#262626] transition-colors focus-within:border-[#3b82f6]/40">
+              <label className="label-premium">Hexadecimal Payload Identifier</label>
               <input
                 type="text"
                 className="input-premium font-mono"
-                placeholder="e.g. 0xabc123..."
+                placeholder="0x..."
                 value={hashInput}
                 onChange={(e) => setHashInput(e.target.value.trim())}
               />
             </div>
 
             {/* Action */}
-            <div className="pt-6 border-t border-[#e2e8f0]">
+            <div className="pt-4">
               <button
                 onClick={() => verifyHash(hashInput)}
                 disabled={!hashInput || status === "verifying"}
-                className="w-full btn-primary text-base py-3.5"
+                className="w-full btn-primary text-[13px] py-5 uppercase tracking-widest font-black"
               >
-                {status === "verifying" ? "Querying Solana network..." : "Authenticate record"}
+                {status === "verifying" ? "Synchronizing Nodes..." : "Execute Ledger Query"}
               </button>
 
               {errorMsg && (
-                <div className="mt-4 p-3 bg-[#fef2f2] border border-[#fecaca] text-[#b91c1c] text-[13px] font-medium flex items-start gap-2">
-                  <svg className="shrink-0 mt-0.5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
+                <div className="mt-4 p-4 bg-[#0a0a0a] border border-[#ef4444]/30 text-[#ef4444] text-[12px] font-mono flex items-start gap-3 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
+                  <span className="text-[#ef4444] font-black">ERR</span>
                   {errorMsg}
                 </div>
               )}
@@ -166,55 +167,51 @@ export default function VerifyPage() {
       </div>
 
       {/* Right Side Info Panel */}
-      <aside className="w-full xl:w-[400px]">
+      <aside className="w-full xl:w-[450px]">
 
-        <div className="stripe-panel p-8 h-full bg-[#f8fafc] flex flex-col">
-          <div className="text-[12px] font-bold text-[#64748b] uppercase tracking-wide mb-6">Execution Results</div>
+        <div className="stripe-panel p-8 h-full bg-[#151515] flex flex-col border-t-2 border-t-[#3b82f6] shadow-[0_10px_40px_rgba(0,0,0,1)]">
+          <div className="text-[10px] font-bold text-[#737373] uppercase tracking-widest mb-8 text-center">Execution Output State</div>
 
           {status === "idle" && (
             <div className="flex-1 flex flex-col items-center justify-center text-center pb-10">
-              <div className="w-12 h-12 border-2 border-[#cbd5e1] text-[#94a3b8] flex items-center justify-center mb-4">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
+              <div className="w-20 h-20 bg-[#0a0a0a] border border-[#262626] shadow-[inset_0_0_20px_rgba(0,0,0,1)] flex items-center justify-center mb-6">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3f3f46" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
               </div>
-              <div className="text-[15px] font-semibold text-[#425466] mb-1">Awaiting target hash</div>
+              <div className="text-[15px] font-black text-white tracking-widest uppercase mb-3">Awaiting Query</div>
+              <div className="text-[11px] text-[#737373] font-mono leading-relaxed max-w-[250px]">Input hash parameters to query the Solana Mainnet footprint layer.</div>
             </div>
           )}
 
           {status === "verifying" && (
             <div className="flex-1 flex flex-col items-center justify-center text-center pb-10">
-              <span className="w-8 h-8 rounded-full border-2 border-[#e2e8f0] border-t-[#635bff] animate-spin mb-4"></span>
-              <div className="text-[15px] font-semibold text-[#0a2540]">Connecting to Devnet cluster...</div>
+              <span className="w-12 h-12 bg-[#000000] border-2 border-[#262626] border-t-[#3b82f6] animate-spin mb-6 shadow-[0_0_30px_rgba(59,130,246,0.2)]"></span>
+              <div className="text-[15px] font-black text-[#3b82f6] tracking-widest uppercase">Connecting to Peer Cluster...</div>
             </div>
           )}
 
           {status === "valid" && (
-            <div className="animate-slide-up flex-1">
-              <div className="border border-[#bbf7d0] bg-[#f0fdf4] p-6 text-center mb-8 flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#dcfce7] text-[#16a34a] flex items-center justify-center mb-4 border border-[#bbf7d0] shadow-sm">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-[#166534] mb-1">Authentic Record</h3>
-                <p className="text-[13px] text-[#15803d]">This document matches the verifiable blockchain payload perfectly.</p>
+            <div className="animate-slide-up flex-1 flex flex-col">
+
+              <div className="flex items-center gap-3 justify-center mb-8 bg-[#0a0a0a] border border-[#262626] p-4 shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
+                <span className="w-3 h-3 bg-[#22c55e] shadow-[0_0_15px_rgba(34,197,94,0.6)] animate-pulse"></span>
+                <span className="text-xl font-black text-[#22c55e] uppercase tracking-widest">Valid Entity</span>
               </div>
 
-              <div className="mb-6">
-                <div className="text-[11px] font-bold text-[#64748b] uppercase mb-1.5">Evaluated Hash</div>
-                <div className="bg-white p-3 border border-[#e2e8f0] font-mono text-[11px] text-[#0a2540] break-all leading-relaxed shadow-sm">
+              <div className="mb-8">
+                <div className="text-[10px] font-bold text-[#737373] uppercase mb-2 tracking-widest">Requested Vector</div>
+                <div className="bg-[#000000] p-4 border border-[#262626] font-mono text-[12px] text-white break-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
                   {hashInput}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3 border-t border-[#e2e8f0] mt-auto pt-6">
-                <div>
-                  <div className="text-[11px] font-bold text-[#64748b] uppercase mb-1">Status</div>
-                  <div className="text-[13px] font-bold text-[#0a2540]">Active</div>
+              <div className="grid grid-cols-2 gap-4 mt-auto">
+                <div className="bg-[#0a0a0a] border border-[#262626] p-6 text-center">
+                  <div className="text-[10px] font-bold text-[#737373] uppercase mb-2 tracking-widest">Node State</div>
+                  <div className="text-[14px] font-black text-[#22c55e] uppercase tracking-wider">Active</div>
                 </div>
-                <div>
-                  <div className="text-[11px] font-bold text-[#64748b] uppercase mb-1">Network Base</div>
-                  <div className="text-[13px] font-bold text-[#0a2540] flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-[#4f46e5]"></span>
-                    Solana Devnet
-                  </div>
+                <div className="bg-[#0a0a0a] border border-[#262626] p-6 text-center">
+                  <div className="text-[10px] font-bold text-[#737373] uppercase mb-2 tracking-widest">Cluster Target</div>
+                  <div className="text-[14px] font-bold text-white uppercase tracking-wider">Devnet</div>
                 </div>
               </div>
             </div>
@@ -222,25 +219,21 @@ export default function VerifyPage() {
 
           {status === "revoked" && (
             <div className="animate-slide-up flex-1">
-              <div className="border border-[#fecaca] bg-[#fef2f2] p-6 text-center mb-8 flex flex-col items-center">
-                <div className="w-12 h-12 bg-[#fee2e2] text-[#dc2626] flex items-center justify-center mb-4 border border-[#fecaca] shadow-sm">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line x1="9" y1="9" x2="15" y2="15" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-[#991b1b] mb-1">Revoked Record</h3>
-                <p className="text-[13px] text-[#b91c1c]">The issuing authority has permanently revoked the integrity of this payload.</p>
+              <div className="flex items-center gap-3 justify-center mb-8 bg-[#0a0a0a] border border-[#ef4444]/30 p-4 shadow-[inset_0_0_20px_rgba(239,68,68,0.1)]">
+                <span className="w-3 h-3 bg-[#ef4444] shadow-[0_0_15px_rgba(239,68,68,0.6)] animate-pulse"></span>
+                <span className="text-xl font-black text-[#ef4444] uppercase tracking-widest">Revoked State</span>
               </div>
+              <p className="text-[13px] text-[#ef4444] font-mono text-center leading-relaxed">The issuing authority has permanently deprecated the integrity of this payload footprint.</p>
             </div>
           )}
 
           {status === "not_found" && (
             <div className="animate-slide-up flex-1">
-              <div className="border border-[#e2e8f0] bg-white p-6 text-center mb-8 flex flex-col items-center shadow-sm">
-                <div className="w-12 h-12 bg-[#f1f5f9] text-[#64748b] flex items-center justify-center mb-4 border border-[#e2e8f0] shadow-sm">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
-                </div>
-                <h3 className="text-xl font-bold text-[#0a2540] mb-1">Unrecognized Hash</h3>
-                <p className="text-[13px] text-[#425466]">This signature does not exist on the current network ledger.</p>
+              <div className="flex items-center gap-3 justify-center mb-8 bg-[#0a0a0a] border border-[#262626] p-4 shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
+                <span className="w-3 h-3 bg-[#737373] shadow-[0_0_15px_rgba(0,0,0,0.6)] animate-pulse"></span>
+                <span className="text-xl font-black text-white uppercase tracking-widest">Hash Void</span>
               </div>
+              <p className="text-[13px] text-[#a3a3a3] font-mono text-center leading-relaxed">This signature sequence does not exist on the current clustered ledger. Integrity nullified.</p>
             </div>
           )}
 
