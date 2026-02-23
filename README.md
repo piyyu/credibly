@@ -66,6 +66,17 @@ Program ID: `E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU`
 - [x] Copy-to-clipboard on all hash displays
 - [x] Wallet dropdown with address copy + disconnect
 
+## Phase 3 — Real-World Readiness (Planned)
+
+- [ ] **On-chain metadata** — Add `issued_at` timestamp, `recipient` pubkey, and `credential_type` to the Solana program
+- [ ] **Recipient experience** — `/my-credentials` page for recipients to view credentials issued to them
+- [ ] **Shareable certificates** — Downloadable verifiable credential PDF with embedded QR code
+- [ ] **Batch issuance** — Multi-file upload for bulk credential anchoring (graduation use case)
+- [ ] **Network selector** — Devnet / Mainnet-beta toggle with environment-based program IDs
+- [ ] **Off-chain metadata** — Store human-readable info (student name, institution, title) on IPFS/Arweave keyed by on-chain hash
+- [ ] **SOL balance check** — Pre-flight balance validation before issuing to prevent confusing errors
+- [ ] **Transaction confirmation UX** — Show block confirmations in real-time, not just success/fail
+
 ## Getting Started
 
 ```bash
