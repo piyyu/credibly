@@ -83,41 +83,45 @@ export default function IssuePage() {
   };
 
   return (
-    <div className="flex flex-col xl:flex-row gap-8 h-full">
+    <div className="flex flex-col xl:flex-row gap-10 h-full pb-10">
 
-      <div className="flex-1 flex flex-col items-center justify-start pt-6 overflow-y-auto custom-scrollbar">
+      <div className="flex-1 flex flex-col items-center justify-start pt-2 overflow-y-auto custom-scrollbar">
 
-        <div className="w-full max-w-2xl stripe-panel bg-[#151515] p-8 md:p-12 relative overflow-hidden border-t-[#3b82f6] border-t-2 shadow-[0_10px_40px_rgba(0,0,0,1)]">
+        <div className="w-full max-w-2xl stripe-panel bg-white p-10 md:p-14 relative overflow-hidden">
 
-          <div className="mb-10 text-center">
-            <div className="inline-flex items-center justify-center p-4 bg-[#0a0a0a] border border-[#262626] shadow-[inset_0_0_15px_rgba(0,0,0,1)] mb-6 mx-auto">
-              <span className="text-[#3b82f6] font-bold text-xl drop-shadow-[0_0_10px_rgba(59,130,246,0.6)]">SYS_01</span>
-            </div>
-            <h2 className="text-3xl font-black text-white tracking-widest uppercase mb-3">Payload Fingerprint</h2>
-            <p className="text-[#a3a3a3] font-medium leading-relaxed max-w-[80%] mx-auto">Cryptographically hash and append a file footprint to the Solana ledger structure.</p>
+          <div className="mb-14 text-center">
+            <div className="text-[12px] font-medium text-[#D95C41] uppercase tracking-widest mb-4">Payload Issuance</div>
+            <h2 className="text-[32px] font-serif text-[#1C1C1E] tracking-tight mb-4">Cryptographic Anchor</h2>
+            <p className="text-[#8A8985] text-[15px] font-light leading-relaxed max-w-[85%] mx-auto">
+              Generate a deterministic hash vector of a source document and append it precisely to the layer 1 ledger.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-10">
 
             {/* Step 1 */}
-            <div className="p-6 bg-[#0a0a0a] border border-[#262626] transition-colors hover:border-[#3b82f6]/40">
-              <label className="label-premium flex justify-between items-center mb-4">
-                <span className="flex items-center gap-3"><span className="text-[#3b82f6]">01</span> Authorization Wallet</span>
-                {wallet.publicKey && <span className="text-[#3b82f6] text-[10px] bg-[#3b82f6]/10 px-2 py-1 border border-[#3b82f6]/30">SYNCED</span>}
+            <div>
+              <label className="flex justify-between items-center mb-4">
+                <span className="flex items-center gap-3 text-[14px] font-medium text-[#1C1C1E]">
+                  <span className="w-6 h-6 rounded-full bg-[#FAF9F6] text-[#8A8985] flex items-center justify-center text-[11px] border border-[#E8E6DF]">1</span>
+                  Hardware Authorization
+                </span>
+                {wallet.publicKey && <span className="text-[#4B8B67] text-[12px] font-medium flex items-center gap-1.5"><span className="w-1.5 h-1.5 bg-[#4B8B67] rounded-full"></span> Synced</span>}
               </label>
 
-              <div className={`[&_.wallet-adapter-button]:!bg-[#151515] [&_.wallet-adapter-button]:!text-white [&_.wallet-adapter-button]:!hover:bg-[#262626] [&_.wallet-adapter-button]:!h-14 [&_.wallet-adapter-button]:!rounded-none [&_.wallet-adapter-button]:!font-mono [&_.wallet-adapter-button]:!font-bold [&_.wallet-adapter-button]:!text-sm [&_.wallet-adapter-button]:!transition-all [&_.wallet-adapter-button]:!border [&_.wallet-adapter-button]:!border-[#262626] [&_.wallet-adapter-button]:!shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] w-full`}>
+              <div className={`[&_.wallet-adapter-button]:!bg-[#FAF9F6] [&_.wallet-adapter-button]:!text-[#1C1C1E] [&_.wallet-adapter-button]:!hover:bg-[#F4F2EC] [&_.wallet-adapter-button]:!h-14 [&_.wallet-adapter-button]:!rounded-xl [&_.wallet-adapter-button]:!font-sans [&_.wallet-adapter-button]:!font-medium [&_.wallet-adapter-button]:!text-[15px] [&_.wallet-adapter-button]:!transition-all [&_.wallet-adapter-button]:!border [&_.wallet-adapter-button]:!border-[#E8E6DF] [&_.wallet-adapter-button]:!shadow-none w-full`}>
                 <WalletMultiButton />
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="p-6 bg-[#0a0a0a] border border-[#262626] transition-colors relative group/upload">
-              <label className="label-premium mb-4 flex items-center gap-3">
-                <span className="text-[#3b82f6]">02</span> Target Document Input
+            <div className="relative group/upload">
+              <label className="flex items-center gap-3 text-[14px] font-medium text-[#1C1C1E] mb-4">
+                <span className="w-6 h-6 rounded-full bg-[#FAF9F6] text-[#8A8985] flex items-center justify-center text-[11px] border border-[#E8E6DF]">2</span>
+                Target Document Input
               </label>
 
-              <div className="relative border-2 border-dashed border-[#262626] p-8 text-center bg-[#151515]">
+              <div className="relative border border-dashed border-[#C0BEB8] rounded-xl p-10 text-center bg-[#FAF9F6] transition-colors hover:bg-[#F4F2EC]">
                 <input
                   type="file"
                   accept="application/pdf"
@@ -126,36 +130,36 @@ export default function IssuePage() {
                 />
 
                 {!file ? (
-                  <div className="group-hover/upload:opacity-100 opacity-60 transition-opacity">
-                    <div className="w-12 h-12 bg-[#0a0a0a] border border-[#262626] text-[#737373] flex items-center justify-center mx-auto mb-4 group-hover/upload:border-[#3b82f6]/50 group-hover/upload:text-[#3b82f6] transition-colors shadow-[inset_0_0_15px_rgba(0,0,0,1)]">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>
+                  <div className="opacity-80 transition-opacity">
+                    <div className="w-12 h-12 bg-white rounded-full text-[#8A8985] flex items-center justify-center mx-auto mb-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E8E6DF]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" x2="12" y1="3" y2="15" /></svg>
                     </div>
-                    <div className="text-[14px] font-bold text-white mb-2 uppercase tracking-wide">Upload Data Target</div>
-                    <div className="text-[10px] text-[#737373] font-mono">Accepts: PDF / Max: 50MB</div>
+                    <div className="text-[15px] font-medium text-[#1C1C1E] mb-1">Select a payload document...</div>
+                    <div className="text-[12px] text-[#8A8985] font-light">Compatible with PDF targets up to 50MB.</div>
                   </div>
                 ) : (
                   <div>
-                    <div className="w-12 h-12 bg-[#0a0a0a] text-[#3b82f6] border border-[#3b82f6]/30 flex items-center justify-center mx-auto mb-4 shadow-[0_0_15px_rgba(59,130,246,0.2)]">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" x2="8" y1="13" y2="13" /><line x1="16" x2="8" y1="17" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+                    <div className="w-12 h-12 bg-[#1C1C1E] rounded-full text-white flex items-center justify-center mx-auto mb-4 shadow-[0_4px_15px_rgba(0,0,0,0.1)]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
                     </div>
-                    <div className="text-[14px] font-black text-white mb-1 truncate px-4 font-mono">{file.name}</div>
-                    <div className="text-[11px] text-[#737373] font-mono">{(file.size / 1024 / 1024).toFixed(2)} MB DUMP</div>
+                    <div className="text-[15px] font-medium text-[#1C1C1E] mb-1 truncate px-4">{file.name}</div>
+                    <div className="text-[12px] text-[#8A8985]">{(file.size / 1024 / 1024).toFixed(2)} MB volume</div>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Action */}
-            <div className="pt-4">
+            <div className="pt-6 border-t border-[#F4F2EC]">
               <button
                 onClick={handleIssue}
                 disabled={!file || !wallet.publicKey || ["hashing", "signing", "confirming"].includes(status)}
-                className={`w-full py-5 font-black text-[13px] transition-all flex items-center justify-center gap-2 uppercase tracking-widest ${status === 'success'
-                    ? 'bg-[#0a0a0a] text-[#22c55e] border border-[#22c55e]/50 shadow-[0_0_20px_rgba(34,197,94,0.2)]'
-                    : 'btn-primary border border-transparent'
+                className={`w-full py-4 rounded-full font-medium text-[15px] transition-all flex items-center justify-center gap-2 ${status === 'success'
+                    ? 'bg-[#F4F2EC] text-[#4B8B67] border border-[#E8E6DF]'
+                    : 'btn-primary'
                   }`}
               >
-                {status === "idle" && "Execute Hash Operation"}
+                {status === "idle" && "Commence Anchor Sequence"}
                 {status === "hashing" && "Hashing Sequence..."}
                 {status === "signing" && "Awaiting Authorization..."}
                 {status === "confirming" && "Broadcasting Payload..."}
@@ -164,8 +168,8 @@ export default function IssuePage() {
               </button>
 
               {errorMsg && (
-                <div className="mt-4 p-4 bg-[#0a0a0a] border border-[#ef4444]/30 text-[#ef4444] text-[12px] font-mono flex items-start gap-3 shadow-[0_0_15px_rgba(239,68,68,0.1)]">
-                  <span className="text-[#ef4444] font-black">ERR</span>
+                <div className="mt-4 p-4 bg-[#FDF8F8] border border-[#F2C4C4] rounded-lg text-[#B83E3E] text-[13px] font-medium flex items-start gap-3">
+                  <svg className="shrink-0 mt-0.5" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
                   {errorMsg}
                 </div>
               )}
@@ -176,42 +180,46 @@ export default function IssuePage() {
       </div>
 
       {/* Right Side Info Panel */}
-      <aside className="w-full xl:w-[450px]">
+      <aside className="w-full xl:w-[450px] pt-2">
         {status === "success" && txSig ? (
-          <div className="stripe-panel bg-[#151515] p-8 animate-slide-up h-full flex flex-col border-t-2 border-t-[#22c55e]">
+          <div className="stripe-panel bg-white p-10 animate-slide-up h-full flex flex-col items-center text-center">
 
-            <div className="flex items-center gap-3 justify-center mb-8 bg-[#0a0a0a] border border-[#262626] p-4 shadow-[inset_0_0_20px_rgba(0,0,0,1)]">
-              <span className="w-3 h-3 bg-[#22c55e] shadow-[0_0_15px_rgba(34,197,94,0.6)] animate-pulse"></span>
-              <span className="text-xl font-black text-[#22c55e] uppercase tracking-widest">Anchored</span>
+            <div className="w-16 h-16 bg-[#F4F2EC] rounded-full flex items-center justify-center mb-6">
+              <span className="w-6 h-6 bg-[#4B8B67] rounded-full flex items-center justify-center">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
+              </span>
             </div>
 
-            <div className="mb-8">
-              <div className="text-[10px] font-bold text-[#737373] uppercase mb-2 tracking-widest">SHA-256 Vector String</div>
-              <div className="bg-[#000000] p-4 border border-[#262626] font-mono text-[12px] text-[#3b82f6] break-all shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]">
+            <h3 className="text-[20px] font-serif font-medium text-[#1C1C1E] mb-2">Operation Successful</h3>
+            <p className="text-[14px] text-[#8A8985] mb-10">Data footprint established on the ledger.</p>
+
+            <div className="w-full mb-8 text-left">
+              <div className="text-[11px] font-medium text-[#8A8985] uppercase mb-2 tracking-widest pl-1">SHA-256 Vector String</div>
+              <div className="bg-[#FAF9F6] p-4 rounded-xl border border-[#E8E6DF] font-mono text-[12px] text-[#49494B] break-all">
                 {hashResult}
               </div>
             </div>
 
-            <div className="mb-8">
-              <div className="text-[10px] font-bold text-[#737373] uppercase mb-2 tracking-widest">Ledger Block Identifier</div>
+            <div className="w-full mb-10 text-left">
+              <div className="text-[11px] font-medium text-[#8A8985] uppercase mb-2 tracking-widest pl-1">Ledger Block Identifier</div>
               <a
                 href={`https://explorer.solana.com/tx/${txSig}?cluster=devnet`}
                 target="_blank"
                 rel="noreferrer"
-                className="block bg-[#000000] p-4 border border-[#262626] font-mono text-[12px] text-white hover:text-[#3b82f6] hover:border-[#3b82f6]/50 truncate transition-colors shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]"
+                className="block bg-[#FAF9F6] p-4 rounded-xl border border-[#E8E6DF] font-mono text-[12px] text-[#D95C41] hover:text-[#1C1C1E] truncate transition-colors"
               >
                 {txSig}
               </a>
             </div>
 
-            <div className="mt-auto flex flex-col items-center justify-center pt-8 border-t border-[#262626]">
-              <div className="text-[10px] font-bold text-[#737373] uppercase tracking-widest mb-4">Read-Only Matrix</div>
-              <div className="p-4 bg-white shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+            <div className="mt-auto flex flex-col items-center justify-center w-full pt-8 border-t border-[#F4F2EC]">
+              <div className="text-[11px] font-medium text-[#8A8985] uppercase tracking-widest mb-6">Execution Matrix</div>
+              <div className="p-4 bg-white rounded-2xl border border-[#E8E6DF] shadow-[0_4px_20px_rgba(0,0,0,0.03)] opacity-90 inline-block">
                 <QRCodeSVG
                   value={JSON.stringify({ hash: hashResult, network: "devnet" })}
-                  size={180}
+                  size={160}
                   level="H"
-                  fgColor="#000000"
+                  fgColor="#1C1C1E"
                   bgColor="#ffffff"
                 />
               </div>
@@ -219,12 +227,12 @@ export default function IssuePage() {
 
           </div>
         ) : (
-          <div className="stripe-panel bg-[#0a0a0a] border-[#262626] p-8 h-full flex flex-col items-center justify-center text-center shadow-[inset_0_0_30px_rgba(0,0,0,1)]">
-            <div className="w-16 h-16 bg-[#151515] border border-[#262626] text-[#3f3f46] flex items-center justify-center mb-6">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
+          <div className="stripe-panel bg-[#FAF9F6] border-dashed border-[#C0BEB8] p-10 h-full flex flex-col items-center justify-center text-center shadow-none">
+            <div className="w-14 h-14 bg-white rounded-full border border-[#E8E6DF] text-[#8A8985] flex items-center justify-center mb-6 shadow-sm">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="8" y2="12" /><line x1="12" x2="12.01" y1="16" y2="16" /></svg>
             </div>
-            <div className="text-[14px] font-black text-white uppercase tracking-widest mb-3">Idle Subsystem</div>
-            <div className="text-[11px] text-[#737373] max-w-[200px] leading-relaxed font-mono">Sequence the required parameters to construct the hash footprint payload.</div>
+            <div className="text-[16px] font-serif font-medium text-[#1C1C1E] mb-2">Idle Registration Process</div>
+            <div className="text-[13px] text-[#8A8985] max-w-[220px] leading-relaxed font-light">Authenticate your hardware and append a document footprint.</div>
           </div>
         )}
       </aside>
