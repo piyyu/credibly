@@ -49,10 +49,10 @@ export default function Home() {
           </div>
 
           <div className="list-item">
-            <div className="item-icon">🎓</div>
+            <div className="item-icon">📄</div>
             <div className="item-details">
-              <h4>Master of Computer Science</h4>
-              <p>Recipient: Sarah Jenkins</p>
+              <h4>Corporate Identity Verification</h4>
+              <p>Entity: Acme Corp</p>
             </div>
             <div className="status-badge onchain">
               <span>⚡</span> Onchain
@@ -61,10 +61,10 @@ export default function Home() {
           </div>
 
           <div className="list-item">
-            <div className="item-icon">📜</div>
+            <div className="item-icon">⚖️</div>
             <div className="item-details">
-              <h4>Data Science Certification</h4>
-              <p>Recipient: Michael Chen</p>
+              <h4>Non-Disclosure Agreement (Hash)</h4>
+              <p>Issuer: Legal Dept</p>
             </div>
             <div className="status-badge onchain">
               <span>⚡</span> Onchain
@@ -75,8 +75,8 @@ export default function Home() {
           <div className="list-item">
             <div className="item-icon">⚡</div>
             <div className="item-details">
-              <h4>Bachelor of Arts</h4>
-              <p>Recipient: Emma Wilson</p>
+              <h4>Service Level Agreement</h4>
+              <p>Recipient: Client Beta</p>
             </div>
             <div className="status-badge pending">
               <span>⌛</span> Minting...
@@ -85,10 +85,10 @@ export default function Home() {
           </div>
 
           <div className="list-item">
-            <div className="item-icon">🎓</div>
+            <div className="item-icon">🛡️</div>
             <div className="item-details">
-              <h4>Blockchain Engineering</h4>
-              <p>Recipient: David Ross</p>
+              <h4>Compliance Audit Record</h4>
+              <p>Inspector: SecOps</p>
             </div>
             <div className="status-badge onchain">
               <span>⚡</span> Onchain

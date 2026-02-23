@@ -10,7 +10,7 @@ export default function Header() {
     <header>
       <Link href="/" className="brand">
         <div className="brand-dot"></div>
-        CredChain
+        Credibly
       </Link>
 
       <nav className="nav-pills">
@@ -20,8 +20,8 @@ export default function Header() {
       </nav>
 
       <div className="user-profile">
-        Univ. Admin
-        <div className="avatar">UA</div>
+        Registry Admin
+        <div className="avatar">AD</div>
       </div>
     </header>
   );
