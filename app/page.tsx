@@ -1,142 +1,69 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <>
-      <main className="main-grid">
-        <div className="stats-row">
-          <div className="card">
-            <div className="stats-header">
-              <div>
-                <div className="stat-title">Issuance Rate</div>
-                <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "6px", fontWeight: "500" }}>Last 30 Days</div>
-              </div>
-              <div className="stat-pill">
-                <span>✓</span> 98.5%
-              </div>
-            </div>
-            <div className="chart-container">
-              <div className="bar"><div className="bar-fill" style={{ height: "40%" }}></div></div>
-              <div className="bar"><div className="bar-fill" style={{ height: "65%" }}></div></div>
-              <div className="bar"><div className="bar-fill" style={{ height: "45%" }}></div></div>
-              <div className="bar"><div className="bar-fill" style={{ height: "80%" }}></div></div>
-              <div className="bar"><div className="bar-fill highlight" style={{ height: "60%" }}><div className="bar-label">Now</div></div></div>
-              <div className="bar"><div className="bar-fill" style={{ height: "30%" }}></div></div>
-              <div className="bar"><div className="bar-fill" style={{ height: "50%" }}></div></div>
-            </div>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", background: "var(--bg-body)" }}>
+      <header style={{ padding: "32px 48px", display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative", zIndex: 10 }}>
+        <div style={{ fontSize: "28px", display: "flex", alignItems: "center", gap: "12px", fontWeight: 700, color: "var(--text-primary)", textDecoration: "none", letterSpacing: "-0.03em" }}>
+          <div style={{ width: "14px", height: "14px", background: "var(--bg-accent-lime)", borderRadius: "50%", border: "2px solid var(--bg-body)", boxShadow: "0 0 0 1px var(--text-primary)" }}></div>
+          Credibly
+        </div>
+        <Link
+          href="/dashboard"
+          style={{
+            background: "var(--text-primary)",
+            color: "white",
+            padding: "12px 32px",
+            borderRadius: "var(--radius-pill)",
+            fontWeight: "600",
+            textDecoration: "none",
+            transition: "transform 0.2s"
+          }}
+        >
+          Go to App
+        </Link>
+      </header>
+
+      <main style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ maxWidth: "800px", display: "flex", flexDirection: "column", alignItems: "center", gap: "32px", zIndex: 10 }}>
+          <div style={{ background: "rgba(202, 242, 121, 0.2)", color: "#5ea300", padding: "8px 24px", borderRadius: "var(--radius-pill)", fontWeight: "700", fontSize: "14px", border: "1px solid rgba(202, 242, 121, 0.5)" }}>
+            Powered by Solana Devnet
           </div>
 
-          <Link href="/issue" className="card card-purple issue-card">
-            <div>
-              <h2>Issue New<br />Credentials</h2>
-              <p style={{ opacity: 0.7, fontSize: "15px", fontWeight: "500" }}>Verify recipients and mint onchain.</p>
-            </div>
-            <button className="issue-action cursor-pointer text-left">
-              Start Process
-              <span>→</span>
-            </button>
-          </Link>
+          <h1 style={{ fontSize: "72px", fontWeight: "800", letterSpacing: "-0.04em", lineHeight: 1.1, color: "var(--text-primary)" }}>
+            Trustless Issuance <br />
+            <span style={{ color: "transparent", WebkitTextStroke: "2px var(--text-primary)" }}>At Internet Scale.</span>
+          </h1>
+
+          <p style={{ fontSize: "20px", color: "var(--text-secondary)", maxWidth: "600px", lineHeight: 1.5, fontWeight: "500" }}>
+            The transparent and decentralized protocol for issuing, managing, and instantly verifying B2B records and documents on the blockchain.
+          </p>
+
+          <div style={{ display: "flex", gap: "16px", marginTop: "16px" }}>
+            <Link
+              href="/dashboard"
+              className="verify-btn"
+              style={{ padding: "20px 48px", fontSize: "18px", width: "auto", display: "inline-block", background: "var(--bg-accent-lime)", color: "var(--text-primary)", textDecoration: "none", borderRadius: "var(--radius-pill)", fontWeight: 700 }}
+            >
+              Launch Dashboard
+            </Link>
+          </div>
         </div>
 
-        <div className="list-container">
-          <div className="list-header">
-            <h3>Recent Credentials</h3>
-            <div className="filter-group">
-              <button className="filter-pill active">All</button>
-              <button className="filter-pill">Onchain</button>
-              <button className="filter-pill">Pending</button>
-            </div>
-          </div>
-
-          <div className="list-item">
-            <div className="item-icon">📄</div>
-            <div className="item-details">
-              <h4>Corporate Identity Verification</h4>
-              <p>Entity: Acme Corp</p>
-            </div>
-            <div className="status-badge onchain">
-              <span>⚡</span> Onchain
-            </div>
-            <div className="action-icon">⋯</div>
-          </div>
-
-          <div className="list-item">
-            <div className="item-icon">⚖️</div>
-            <div className="item-details">
-              <h4>Non-Disclosure Agreement (Hash)</h4>
-              <p>Issuer: Legal Dept</p>
-            </div>
-            <div className="status-badge onchain">
-              <span>⚡</span> Onchain
-            </div>
-            <div className="action-icon">⋯</div>
-          </div>
-
-          <div className="list-item">
-            <div className="item-icon">⚡</div>
-            <div className="item-details">
-              <h4>Service Level Agreement</h4>
-              <p>Recipient: Client Beta</p>
-            </div>
-            <div className="status-badge pending">
-              <span>⌛</span> Minting...
-            </div>
-            <div className="action-icon">⋯</div>
-          </div>
-
-          <div className="list-item">
-            <div className="item-icon">🛡️</div>
-            <div className="item-details">
-              <h4>Compliance Audit Record</h4>
-              <p>Inspector: SecOps</p>
-            </div>
-            <div className="status-badge onchain">
-              <span>⚡</span> Onchain
-            </div>
-            <div className="action-icon">⋯</div>
-          </div>
-        </div>
+        <div style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "100vw",
+          height: "100vh",
+          background: "radial-gradient(circle at center, var(--bg-accent-lime) 0%, rgba(202,242,121,0) 60%)",
+          opacity: 0.15,
+          pointerEvents: "none",
+          filter: "blur(60px)",
+          zIndex: 0
+        }}></div>
       </main>
-
-      <aside className="detail-panel border border-[#333]">
-        <div className="detail-header">
-          <div>
-            <div className="detail-label">Status</div>
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ width: "8px", height: "8px", background: "var(--bg-accent-lime)", borderRadius: "50%", boxShadow: "0 0 8px var(--bg-accent-lime)" }}></span>
-              <span style={{ fontWeight: 700 }}>Verified</span>
-            </div>
-          </div>
-          <div className="action-icon" style={{ borderColor: "rgba(255,255,255,0.1)", color: "white", width: "40px", height: "40px" }}>✓</div>
-        </div>
-
-        <div style={{ marginTop: "20px" }}>
-          <div className="detail-label">Total Validated</div>
-          <div className="detail-value-large">1,248</div>
-          <div className="detail-label" style={{ marginTop: "12px", color: "var(--bg-accent-lime)", fontSize: "13px" }}>+12 this week</div>
-        </div>
-
-        <div>
-          <div className="detail-label">Registry Identifier</div>
-          <div className="hash-display">
-            E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU<br />
-            <span style={{ opacity: 0.6 }}>Network: Solana Devnet</span>
-          </div>
-        </div>
-
-        <div className="detail-grid">
-          <div className="detail-box">
-            <h5>System</h5>
-            <span>Active</span>
-          </div>
-          <div className="detail-box">
-            <h5>Queue</h5>
-            <span>0</span>
-          </div>
-        </div>
-
-        <Link href="/verify" className="verify-btn">Verify Chain Data</Link>
-      </aside>
-    </>
+    </div>
   );
 }

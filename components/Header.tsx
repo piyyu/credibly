@@ -14,7 +14,7 @@ export default function Header() {
       </Link>
 
       <nav className="nav-pills">
-        <Link href="/" className={`nav-item ${pathname === '/' ? 'active' : ''}`}>Dashboard</Link>
+        <Link href="/dashboard" className={`nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>Dashboard</Link>
         <Link href="/issue" className={`nav-item ${pathname === '/issue' ? 'active' : ''}`}>Issuance</Link>
         <Link href="/verify" className={`nav-item ${pathname === '/verify' ? 'active' : ''}`}>Verifier</Link>
       </nav>
