@@ -20,7 +20,7 @@ export default function VerifyPage() {
       scanner = new Html5QrcodeScanner(
         "reader",
         { fps: 10, qrbox: { width: 250, height: 250 } },
-                /* verbose= */ false
+        false
       );
       scanner.render((decodedText) => {
         scanner?.clear();
@@ -32,23 +32,16 @@ export default function VerifyPage() {
             verifyHash(parsed.hash);
           }
         } catch {
-          // Fallback to raw string if it's just a hash
           setHashInput(decodedText);
           verifyHash(decodedText);
         }
-      }, (error) => {
-        // Ignore scan errors, it happens continuously during scanning
-      });
+      }, () => { });
     }
 
     return () => {
       if (scanner) scanner.clear().catch(console.error);
     };
   }, [scanActive]);
-
-  const handleVerifyClick = () => {
-    verifyHash(hashInput);
-  };
 
   const verifyHash = async (hashHex: string) => {
     if (!hashHex) return;
@@ -65,7 +58,6 @@ export default function VerifyPage() {
         throw new Error(err.message || "Invalid hash format");
       }
 
-      // Read-only provider setup
       const provider = new AnchorProvider(
         connection,
         { publicKey: pda, signTransaction: async () => { throw new Error("Read only") }, signAllTransactions: async () => { throw new Error("Read only") } } as any,
@@ -95,87 +87,137 @@ export default function VerifyPage() {
   };
 
   return (
-    <main className="flex flex-col items-center min-h-screen p-8 max-w-xl mx-auto w-full">
-      <h1 className="text-3xl font-bold mb-8">Verify Credential</h1>
+    <>
+      <main className="main-grid">
+        <div className="card" style={{ maxWidth: '600px' }}>
+          <div className="stats-header" style={{ marginBottom: "24px" }}>
+            <div>
+              <div className="stat-title">Verify Hash</div>
+              <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "6px", fontWeight: "500" }}>Check Solana Devnet for cryptographic proof of credential existence.</div>
+            </div>
+          </div>
 
-      <div className="w-full bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col gap-6">
+          <div style={{ display: "flex", flexDirection: "column", gap: "24px", paddingTop: "12px" }}>
+            {scanActive ? (
+              <div style={{ borderRadius: "var(--radius-m)", overflow: "hidden", border: "1px solid var(--border-light)" }}>
+                <div id="reader"></div>
+                <button onClick={() => setScanActive(false)} style={{ width: "100%", padding: "12px", background: "#f0f0f0", border: "none", cursor: "pointer", fontWeight: "600" }}>
+                  Cancel Scanner
+                </button>
+              </div>
+            ) : (
+              <button onClick={() => setScanActive(true)} style={{ width: "100%", padding: "40px", border: "2px dashed var(--border-light)", borderRadius: "var(--radius-m)", cursor: "pointer", background: "#FAFAFA", fontSize: "16px", fontWeight: "600", color: "var(--text-secondary)" }}>
+                📷 Scan QR Code
+              </button>
+            )}
 
-        {scanActive ? (
-          <div className="w-full border rounded-lg overflow-hidden bg-gray-50">
-            <div id="reader"></div>
-            <button onClick={() => setScanActive(false)} className="w-full py-3 bg-gray-200 text-gray-700 font-semibold text-sm hover:bg-gray-300">
-              Cancel Scanner
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div style={{ flex: 1, height: "1px", background: "var(--border-light)" }}></div>
+              <span style={{ padding: "0 16px", color: "var(--text-secondary)", fontSize: "13px", fontWeight: "700" }}>OR</span>
+              <div style={{ flex: 1, height: "1px", background: "var(--border-light)" }}></div>
+            </div>
+
+            <div>
+              <label className="input-label">Paste Credential Hash (Hex)</label>
+              <input
+                type="text"
+                className="input-field"
+                placeholder="Paste 64-character SHA-256 hash here..."
+                value={hashInput}
+                onChange={(e) => setHashInput(e.target.value.trim())}
+              />
+            </div>
+
+            <button
+              onClick={() => verifyHash(hashInput)}
+              disabled={!hashInput || status === "verifying"}
+              className="verify-btn"
+              style={{ marginTop: "0", background: "var(--text-primary)", color: "white" }}
+            >
+              {status === "verifying" ? "Lookup Onchain..." : "Verify Credential"}
             </button>
-          </div>
-        ) : (
-          <button onClick={() => setScanActive(true)} className="w-full py-16 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:bg-gray-50 hover:border-gray-400 font-medium flex flex-col items-center justify-center gap-2 transition">
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4"></path></svg>
-            Scan QR Code
-          </button>
-        )}
 
-        <div className="flex items-center">
-          <div className="flex-grow border-t border-gray-200"></div>
-          <span className="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">OR</span>
-          <div className="flex-grow border-t border-gray-200"></div>
+            {errorMsg && (
+              <div style={{ padding: "16px", background: "#FFEBEB", color: "#D32F2F", borderRadius: "var(--radius-s)", fontSize: "14px", fontWeight: "500" }}>
+                {errorMsg}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+
+      <aside className="detail-panel border border-[#333]">
+        <div className="detail-header">
+          <div>
+            <div className="detail-label">Status Overview</div>
+
+            {status === "idle" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "var(--text-inverse-secondary)", borderRadius: "50%" }}></span>
+                <span style={{ fontWeight: 700, color: "var(--text-inverse-secondary)" }}>Awaiting Query</span>
+              </div>
+            )}
+            {status === "verifying" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "#F39C12", borderRadius: "50%" }}></span>
+                <span style={{ fontWeight: 700, color: "#F39C12" }}>Checking Network...</span>
+              </div>
+            )}
+            {status === "valid" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "var(--bg-accent-lime)", borderRadius: "50%", boxShadow: "0 0 8px var(--bg-accent-lime)" }}></span>
+                <span style={{ fontWeight: 700, color: "var(--bg-accent-lime)" }}>Cryptographically Verified</span>
+              </div>
+            )}
+            {status === "revoked" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "#E74C3C", borderRadius: "50%", boxShadow: "0 0 8px #E74C3C" }}></span>
+                <span style={{ fontWeight: 700, color: "#E74C3C" }}>Credential Revoked</span>
+              </div>
+            )}
+            {status === "not_found" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "#E74C3C", borderRadius: "50%", boxShadow: "0 0 8px #E74C3C" }}></span>
+                <span style={{ fontWeight: 700, color: "#E74C3C" }}>Not Found on Solana</span>
+              </div>
+            )}
+            {status === "error" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                <span style={{ width: "8px", height: "8px", background: "#E74C3C", borderRadius: "50%" }}></span>
+                <span style={{ fontWeight: 700, color: "#E74C3C" }}>Error</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-sm font-bold text-gray-700">Paste Credential Hash (Hex)</label>
-          <input
-            type="text"
-            placeholder="e.g. 8a4b..."
-            value={hashInput}
-            onChange={(e) => setHashInput(e.target.value.trim())}
-            className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-blue-500 font-mono text-sm"
-          />
+        {(status === "valid" || status === "revoked") && (
+          <div style={{ marginTop: "20px" }}>
+            <div className="detail-label">Solana Identity</div>
+            <div className="hash-display" style={{ marginTop: "8px" }}>
+              {hashInput}
+            </div>
+          </div>
+        )}
+
+        <div className="detail-grid">
+          <div className="detail-box">
+            <h5>Network</h5>
+            <span>Devnet</span>
+          </div>
+          <div className="detail-box">
+            <h5>Result</h5>
+            <span style={{ fontSize: "15px" }}>
+              {status === "idle" && "Pending"}
+              {status === "verifying" && "Checking"}
+              {status === "valid" && "Valid PDA"}
+              {status === "revoked" && "Revoked PDA"}
+              {status === "not_found" && "Empty PDA"}
+              {status === "error" && "Error"}
+            </span>
+          </div>
         </div>
 
-        <button
-          onClick={handleVerifyClick}
-          disabled={!hashInput || status === "verifying"}
-          className="w-full py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition"
-        >
-          {status === "verifying" ? "Verifying On-Chain..." : "Verify Hash"}
-        </button>
-
-        {errorMsg && (
-          <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm font-medium text-center">
-            {errorMsg}
-          </div>
-        )}
-
-        {status === "valid" && (
-          <div className="mt-4 p-6 bg-green-50 rounded-lg flex flex-col items-center border border-green-200 animate-slide-up">
-            <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-            </div>
-            <h3 className="text-xl font-bold text-green-800">Valid Credential</h3>
-            <p className="text-green-700 text-sm mt-1 text-center">This credential hash is permanently anchored on Solana and has not been revoked.</p>
-          </div>
-        )}
-
-        {status === "revoked" && (
-          <div className="mt-4 p-6 bg-orange-50 rounded-lg flex flex-col items-center border border-orange-200 animate-slide-up">
-            <div className="w-16 h-16 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            </div>
-            <h3 className="text-xl font-bold text-orange-800">Revoked</h3>
-            <p className="text-orange-700 text-sm mt-1 text-center">This credential is formally registered but has been revoked by the issuing institution.</p>
-          </div>
-        )}
-
-        {status === "not_found" && (
-          <div className="mt-4 p-6 bg-red-50 rounded-lg flex flex-col items-center border border-red-200 animate-slide-up">
-            <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-2">
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </div>
-            <h3 className="text-xl font-bold text-red-800">Not Found</h3>
-            <p className="text-red-700 text-sm mt-1 text-center">No record of this credential hash exists on the Solana Devnet registry.</p>
-          </div>
-        )}
-
-      </div>
-    </main>
+      </aside>
+    </>
   );
 }

@@ -2,38 +2,141 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-screen p-8 text-center max-w-2xl">
-      <h1 className="text-4xl font-bold mb-4 tracking-tight">Credibly MVP</h1>
-      <p className="text-xl text-gray-600 mb-8 font-light">
-        A minimal blockchain credential verification system built on Solana
-        Devnet
-      </p>
+    <>
+      <main className="main-grid">
+        <div className="stats-row">
+          <div className="card">
+            <div className="stats-header">
+              <div>
+                <div className="stat-title">Issuance Rate</div>
+                <div style={{ fontSize: "14px", color: "var(--text-secondary)", marginTop: "6px", fontWeight: "500" }}>Last 30 Days</div>
+              </div>
+              <div className="stat-pill">
+                <span>✓</span> 98.5%
+              </div>
+            </div>
+            <div className="chart-container">
+              <div className="bar"><div className="bar-fill" style={{ height: "40%" }}></div></div>
+              <div className="bar"><div className="bar-fill" style={{ height: "65%" }}></div></div>
+              <div className="bar"><div className="bar-fill" style={{ height: "45%" }}></div></div>
+              <div className="bar"><div className="bar-fill" style={{ height: "80%" }}></div></div>
+              <div className="bar"><div className="bar-fill highlight" style={{ height: "60%" }}><div className="bar-label">Now</div></div></div>
+              <div className="bar"><div className="bar-fill" style={{ height: "30%" }}></div></div>
+              <div className="bar"><div className="bar-fill" style={{ height: "50%" }}></div></div>
+            </div>
+          </div>
 
-      <div className="flex flex-col sm:flex-row gap-4 w-full justify-center">
-        <Link
-          href="/issue"
-          className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
-        >
-          Issue Credential
-        </Link>
-        <Link
-          href="/verify"
-          className="px-6 py-3 bg-white text-gray-900 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition"
-        >
-          Verify Credential
-        </Link>
-      </div>
+          <Link href="/issue" className="card card-purple issue-card">
+            <div>
+              <h2>Issue New<br />Credentials</h2>
+              <p style={{ opacity: 0.7, fontSize: "15px", fontWeight: "500" }}>Verify recipients and mint onchain.</p>
+            </div>
+            <button className="issue-action cursor-pointer text-left">
+              Start Process
+              <span>→</span>
+            </button>
+          </Link>
+        </div>
 
-      <div className="mt-16 text-left w-full border-t pt-8">
-        <h2 className="text-sm font-bold text-gray-400 uppercase tracking-wide mb-2">How it works</h2>
-        <ol className="list-decimal list-inside text-gray-600 text-sm space-y-2">
-          <li>Upload your PDF</li>
-          <li>A SHA-256 Hash is generated client side</li>
-          <li>The Hash is stored on Solana Devnet and approved via Wallet</li>
-          <li>A QR code is generated for verification</li>
-          <li>Anyone can scan the QR to verify authenticity instantly</li>
-        </ol>
-      </div>
-    </main>
+        <div className="list-container">
+          <div className="list-header">
+            <h3>Recent Credentials</h3>
+            <div className="filter-group">
+              <button className="filter-pill active">All</button>
+              <button className="filter-pill">Onchain</button>
+              <button className="filter-pill">Pending</button>
+            </div>
+          </div>
+
+          <div className="list-item">
+            <div className="item-icon">🎓</div>
+            <div className="item-details">
+              <h4>Master of Computer Science</h4>
+              <p>Recipient: Sarah Jenkins</p>
+            </div>
+            <div className="status-badge onchain">
+              <span>⚡</span> Onchain
+            </div>
+            <div className="action-icon">⋯</div>
+          </div>
+
+          <div className="list-item">
+            <div className="item-icon">📜</div>
+            <div className="item-details">
+              <h4>Data Science Certification</h4>
+              <p>Recipient: Michael Chen</p>
+            </div>
+            <div className="status-badge onchain">
+              <span>⚡</span> Onchain
+            </div>
+            <div className="action-icon">⋯</div>
+          </div>
+
+          <div className="list-item">
+            <div className="item-icon">⚡</div>
+            <div className="item-details">
+              <h4>Bachelor of Arts</h4>
+              <p>Recipient: Emma Wilson</p>
+            </div>
+            <div className="status-badge pending">
+              <span>⌛</span> Minting...
+            </div>
+            <div className="action-icon">⋯</div>
+          </div>
+
+          <div className="list-item">
+            <div className="item-icon">🎓</div>
+            <div className="item-details">
+              <h4>Blockchain Engineering</h4>
+              <p>Recipient: David Ross</p>
+            </div>
+            <div className="status-badge onchain">
+              <span>⚡</span> Onchain
+            </div>
+            <div className="action-icon">⋯</div>
+          </div>
+        </div>
+      </main>
+
+      <aside className="detail-panel border border-[#333]">
+        <div className="detail-header">
+          <div>
+            <div className="detail-label">Status</div>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <span style={{ width: "8px", height: "8px", background: "var(--bg-accent-lime)", borderRadius: "50%", boxShadow: "0 0 8px var(--bg-accent-lime)" }}></span>
+              <span style={{ fontWeight: 700 }}>Verified</span>
+            </div>
+          </div>
+          <div className="action-icon" style={{ borderColor: "rgba(255,255,255,0.1)", color: "white", width: "40px", height: "40px" }}>✓</div>
+        </div>
+
+        <div style={{ marginTop: "20px" }}>
+          <div className="detail-label">Total Validated</div>
+          <div className="detail-value-large">1,248</div>
+          <div className="detail-label" style={{ marginTop: "12px", color: "var(--bg-accent-lime)", fontSize: "13px" }}>+12 this week</div>
+        </div>
+
+        <div>
+          <div className="detail-label">Registry Identifier</div>
+          <div className="hash-display">
+            E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU<br />
+            <span style={{ opacity: 0.6 }}>Network: Solana Devnet</span>
+          </div>
+        </div>
+
+        <div className="detail-grid">
+          <div className="detail-box">
+            <h5>System</h5>
+            <span>Active</span>
+          </div>
+          <div className="detail-box">
+            <h5>Queue</h5>
+            <span>0</span>
+          </div>
+        </div>
+
+        <Link href="/verify" className="verify-btn">Verify Chain Data</Link>
+      </aside>
+    </>
   );
 }
