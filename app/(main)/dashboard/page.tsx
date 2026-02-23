@@ -1,147 +1,287 @@
-import Link from "next/link";
+"use client"
 
-export default function Dashboard() {
+import { useEffect, useState, useCallback } from "react"
+import Link from "next/link"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { useConnection } from "@solana/wallet-adapter-react"
+import { PublicKey } from "@solana/web3.js"
+import { Program, AnchorProvider, setProvider } from "@coral-xyz/anchor"
+import { PROGRAM_ID, PROGRAM_IDL, deriveCredentialPDA } from "@/lib/program"
+import { hexToUint8Array } from "@/lib/hash"
+import { useToast } from "@/components/ui/Toast"
+
+interface CredentialAccount {
+  pubkey: string
+  issuer: string
+  hash: string
+  revoked: boolean
+}
+
+export default function DashboardPage() {
+  const { publicKey, connected, signTransaction, signAllTransactions } = useWallet()
+  const { connection } = useConnection()
+  const { toast } = useToast()
+  const [credentials, setCredentials] = useState<CredentialAccount[]>([])
+  const [loading, setLoading] = useState(false)
+  const [revoking, setRevoking] = useState<string | null>(null) // hash of credential being revoked
+  const [filter, setFilter] = useState<"all" | "active" | "revoked">("all")
+
+  const fetchCredentials = useCallback(async () => {
+    if (!connected || !publicKey) return
+
+    setLoading(true)
+    try {
+      const accounts = await connection.getProgramAccounts(PROGRAM_ID, {
+        filters: [
+          { dataSize: 80 },
+          {
+            memcmp: {
+              offset: 8,
+              bytes: publicKey.toBase58(),
+            },
+          },
+        ],
+      })
+
+      const decoded: CredentialAccount[] = accounts.map((acc) => {
+        const data = acc.account.data
+        const issuerBytes = data.slice(8, 40)
+        const hashBytes = data.slice(40, 72)
+        const revoked = data[72] === 1
+
+        const issuer = new PublicKey(issuerBytes).toBase58()
+        const hash = Array.from(hashBytes)
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("")
+
+        return {
+          pubkey: acc.pubkey.toBase58(),
+          issuer,
+          hash,
+          revoked,
+        }
+      })
+
+      setCredentials(decoded)
+    } catch (err) {
+      console.error("Error fetching credentials:", err)
+    } finally {
+      setLoading(false)
+    }
+  }, [connected, publicKey, connection])
+
+  useEffect(() => {
+    fetchCredentials()
+  }, [fetchCredentials])
+
+  const handleRevoke = async (credHash: string) => {
+    if (!publicKey || !signTransaction || !signAllTransactions) return
+
+    setRevoking(credHash)
+    try {
+      const hashBuffer = hexToUint8Array(credHash)
+      const credentialPDA = deriveCredentialPDA(hashBuffer)
+
+      const provider = new AnchorProvider(
+        connection,
+        { publicKey, signTransaction, signAllTransactions },
+        { commitment: "confirmed" }
+      )
+      setProvider(provider)
+
+      const program = new Program(PROGRAM_IDL, provider)
+
+      await (program.methods as any)
+        .revokeCredential(Array.from(hashBuffer))
+        .accounts({
+          credential: credentialPDA,
+          issuer: publicKey,
+        })
+        .rpc()
+
+      toast("Credential revoked successfully", "success")
+      await fetchCredentials() // refresh the list
+    } catch (err: any) {
+      console.error("Revoke error:", err)
+      toast(err?.message || "Failed to revoke credential", "error")
+    } finally {
+      setRevoking(null)
+    }
+  }
+
+  const filtered = credentials.filter((c) => {
+    if (filter === "active") return !c.revoked
+    if (filter === "revoked") return c.revoked
+    return true
+  })
+
+  const activeCount = credentials.filter((c) => !c.revoked).length
+  const revokedCount = credentials.filter((c) => c.revoked).length
+
   return (
-    <div className="flex flex-col xl:flex-row gap-10 h-full pb-10">
-
-      <div className="flex-1 flex flex-col gap-10">
-
-        <header className="mb-2">
-          <h1 className="text-[28px] font-serif font-medium text-[#1C1C1E] tracking-tight mb-2">Systems Overview</h1>
-          <p className="text-[#8A8985] text-[15px]">Monitoring programmatic footprint anchors on the Solana layer.</p>
-        </header>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="stripe-panel p-8 flex flex-col justify-between h-56 bg-white">
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-sm font-semibold text-[#1C1C1E] uppercase tracking-widest mb-1">Network Synchrony</h3>
-                <p className="text-[12px] text-[#8A8985]">Devnet Cluster</p>
-              </div>
-              <div className="bg-[#FAF9F6] text-[#D95C41] px-3 py-1 text-[11px] font-medium border border-[#E8E6DF] rounded-full flex items-center gap-2">
-                <span className="w-1.5 h-1.5 bg-[#D95C41] rounded-full"></span>
-                99.9%
-              </div>
-            </div>
-
-            <div className="flex items-end gap-2 h-20 mt-auto">
-              {[40, 65, 45, 80, 60, 30, 85].map((height, i) => (
-                <div key={i} className="flex-1 bg-[#F4F2EC] h-full relative group/bar hover:bg-[#E8E6DF] transition-colors rounded-t-sm overflow-hidden">
-                  <div
-                    style={{ height: `${height}%` }}
-                    className={`absolute bottom-0 w-full transition-all duration-300 rounded-t-sm ${i === 6 ? 'bg-[#D95C41]' : 'bg-[#D9D7D0] group-hover/bar:bg-[#C0BEB8]'}`}
-                  ></div>
-                </div>
-              ))}
-            </div>
+    <>
+      {/* Top Stats Row */}
+      <div className="dash-grid">
+        <div className="dash-stat-card">
+          <div className="dash-stat-header">
+            <span className="dash-stat-title">Your Credentials</span>
+            <span className="dash-stat-pill">
+              {connected ? `✓ ${activeCount} active` : "—"}
+            </span>
           </div>
-
-          <div className="stripe-panel p-8 flex flex-col justify-center h-56 bg-[#1C1C1E] border-transparent text-[#FAF9F6] relative overflow-hidden group">
-
-            <div className="relative z-10 w-full flex flex-col justify-between h-full">
-              <div>
-                <h2 className="text-[22px] font-serif font-medium text-[#FAF9F6] leading-tight mb-3">Initialize<br />Hash Matrix</h2>
-                <p className="text-[13px] text-[#A6A5A3] font-light max-w-[80%]">Substrate payload generation layer.</p>
-              </div>
-              <div className="mt-auto">
-                <Link href="/issue" className="inline-flex items-center gap-2 text-[14px] font-medium text-[#FAF9F6] border-b border-[#FAF9F6]/30 pb-1 hover:border-[#FAF9F6] transition-all w-fit">
-                  Execute Request
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                </Link>
-              </div>
-            </div>
+          <div className="dash-stat-value">
+            {connected ? credentials.length : "—"}
+          </div>
+          <div className="dash-stat-sub">
+            {connected
+              ? loading
+                ? "Loading from Solana devnet..."
+                : `${activeCount} active · ${revokedCount} revoked`
+              : "Connect wallet to view your credentials"}
           </div>
         </div>
 
-        <div className="flex-1 flex flex-col mt-2">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-[16px] font-medium text-[#1C1C1E]">Recent Activity</h2>
-            <button className="text-[14px] font-medium text-[#8A8985] hover:text-[#1C1C1E] transition-colors">View All</button>
+        <Link href="/issue" className="dash-cta-card">
+          <div>
+            <h2>Issue New Credentials</h2>
+            <p>Upload documents and anchor them permanently on Solana.</p>
           </div>
-
-          <div className="stripe-panel overflow-hidden bg-white">
-            <div className="divide-y divide-[#F4F2EC]">
-              {[
-                { title: "Corporate Identity Verification", entity: "Acme Corp", status: "anchored", icon: "❖", date: "Today" },
-                { title: "Non-Disclosure Agreement", entity: "Legal Dept", status: "anchored", icon: "⚲", date: "Today" },
-                { title: "Service Level Agreement", entity: "Client Beta", status: "pending", icon: "☉", date: "Processing" },
-                { title: "Compliance Audit Record", entity: "SecOps", status: "anchored", icon: "⎔", date: "Yesterday" }
-              ].map((item, idx) => (
-                <div key={idx} className="flex justify-between items-center p-5 hover:bg-[#FAF9F6] transition-colors cursor-pointer group">
-                  <div className="flex items-center gap-5">
-                    <div className="w-10 h-10 bg-[#FAF9F6] rounded-full flex items-center justify-center text-[18px] text-[#8A8985] group-hover:text-[#D95C41] transition-colors border border-[#E8E6DF]">
-                      {item.icon}
-                    </div>
-                    <div>
-                      <h4 className="text-[14px] font-medium text-[#1C1C1E]">{item.title}</h4>
-                      <p className="text-[12px] text-[#8A8985] mt-1">{item.entity}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-8">
-                    {item.status === 'anchored' ? (
-                      <div className="flex items-center gap-2 px-3 py-1 bg-[#F4F2EC] text-[#49494B] text-[11px] font-medium rounded-full">
-                        <span className="w-1.5 h-1.5 bg-[#4B8B67] rounded-full"></span>
-                        Verified
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 px-3 py-1 bg-[#FDF8F3] text-[#D95C41] text-[11px] font-medium rounded-full">
-                        <span className="w-1.5 h-1.5 bg-[#D95C41] animate-pulse rounded-full"></span>
-                        Pending processing
-                      </div>
-                    )}
-                    <div className="text-[12px] text-[#8A8985] w-20 text-right hidden sm:block">
-                      {item.date}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          <div className="dash-cta-action">
+            <span>Start Process</span>
+            <span>→</span>
           </div>
-        </div>
-
+        </Link>
       </div>
 
-      {/* Side Panel for Stats */}
-      <div className="w-full xl:w-80 flex flex-col gap-6 pt-2">
-
-        <div className="stripe-panel p-8 bg-white border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E8E6DF]">
-          <h2 className="text-[12px] font-medium text-[#8A8985] uppercase tracking-widest mb-6">Total Operations</h2>
-          <div className="text-[44px] font-serif text-[#1C1C1E] tracking-tight leading-none mb-4">8,492</div>
-          <div className="text-[12px] font-medium text-[#4B8B67] flex items-center gap-1.5">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m18 15-6-6-6 6" /></svg>
-            Volume +124
+      {/* Credential List */}
+      <div className="dash-list">
+        <div className="dash-list-header">
+          <h3>
+            {connected ? "Your Issued Credentials" : "Recent Credentials"}
+          </h3>
+          <div className="dash-filter-group">
+            <button
+              className={`dash-filter-pill ${filter === "all" ? "active" : ""}`}
+              onClick={() => setFilter("all")}
+            >
+              All
+            </button>
+            <button
+              className={`dash-filter-pill ${filter === "active" ? "active" : ""}`}
+              onClick={() => setFilter("active")}
+            >
+              Active
+            </button>
+            <button
+              className={`dash-filter-pill ${filter === "revoked" ? "active" : ""}`}
+              onClick={() => setFilter("revoked")}
+            >
+              Revoked
+            </button>
           </div>
         </div>
 
-        <div className="stripe-panel p-8 bg-white border-none shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E8E6DF]">
-          <h2 className="text-[12px] font-medium text-[#8A8985] uppercase tracking-widest mb-6">Execution Parameters</h2>
-
-          <div className="mb-8">
-            <div className="text-[11px] font-medium text-[#8A8985] uppercase mb-2">Program Node</div>
-            <div className="bg-[#FAF9F6] p-3 rounded-lg border border-[#E8E6DF] font-mono text-[11px] text-[#49494B] break-all">
-              E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU
+        {!connected ? (
+          <div className="dash-list-item">
+            <div className="dash-list-icon">🔗</div>
+            <div className="dash-list-details">
+              <h4>Connect your wallet</h4>
+              <p>Connect a Solana wallet to see credentials you&apos;ve issued</p>
             </div>
           </div>
-
-          <div className="grid grid-cols-2 gap-4 mb-8">
-            <div>
-              <div className="text-[11px] font-medium text-[#8A8985] uppercase mb-1">Cost Ratio</div>
-              <div className="text-[15px] font-medium text-[#1C1C1E]">.0005<span className="text-[11px] text-[#8A8985] ml-1">SOL</span></div>
-            </div>
-            <div>
-              <div className="text-[11px] font-medium text-[#8A8985] uppercase mb-1">Latency</div>
-              <div className="text-[15px] font-medium text-[#1C1C1E]">~400ms</div>
+        ) : loading ? (
+          <div className="dash-list-item">
+            <div className="dash-list-icon">⏳</div>
+            <div className="dash-list-details">
+              <h4>Loading credentials...</h4>
+              <p>Querying Solana devnet</p>
             </div>
           </div>
-
-          <Link href="/verify" className="w-full text-center text-[13px] font-medium text-[#49494B] border border-[#E8E6DF] py-3 rounded-full hover:bg-[#FAF9F6] transition-colors inline-block">
-            Access Explorer Engine
-          </Link>
-        </div>
-
+        ) : filtered.length === 0 ? (
+          <div className="dash-list-item">
+            <div className="dash-list-icon">📭</div>
+            <div className="dash-list-details">
+              <h4>No credentials found</h4>
+              <p>
+                {filter !== "all"
+                  ? `No ${filter} credentials. Try changing the filter.`
+                  : "You haven't issued any credentials yet. Start by issuing one!"}
+              </p>
+            </div>
+          </div>
+        ) : (
+          filtered.map((cred) => (
+            <div key={cred.pubkey} className="dash-list-item">
+              <div className="dash-list-icon">
+                {cred.revoked ? "✕" : "📄"}
+              </div>
+              <Link href={`/credential/${cred.hash}`} className="dash-list-details" style={{ textDecoration: "none", color: "inherit" }}>
+                <h4 style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>
+                  {cred.hash.slice(0, 16)}...{cred.hash.slice(-16)}
+                </h4>
+                <p>PDA: {cred.pubkey.slice(0, 8)}...{cred.pubkey.slice(-8)}</p>
+              </Link>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <span
+                  className={`dash-list-badge ${cred.revoked ? "pending" : "onchain"}`}
+                >
+                  {cred.revoked ? "✕ Revoked" : "⚡ Active"}
+                </span>
+                {!cred.revoked && (
+                  <button
+                    className="dash-revoke-btn"
+                    onClick={() => handleRevoke(cred.hash)}
+                    disabled={revoking === cred.hash}
+                    title="Revoke this credential"
+                  >
+                    {revoking === cred.hash ? "..." : "Revoke"}
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
-    </div>
-  );
+      {/* Side Info Panel */}
+      <div className="dash-side">
+        <div className="dash-side-item">
+          <span className="dash-side-label">Status</span>
+          <span className="dash-side-value">
+            <span
+              className="status-dot active"
+              style={{ marginRight: "8px" }}
+            />
+            {connected ? "Connected" : "Disconnected"}
+          </span>
+        </div>
+
+        <div className="dash-side-item">
+          <span className="dash-side-label">Total Issued</span>
+          <span className="dash-side-value large">
+            {connected ? credentials.length : "—"}
+          </span>
+        </div>
+
+        <div className="dash-side-item full">
+          <span className="dash-side-label">Registry Program</span>
+          <div className="dash-side-hash">
+            {PROGRAM_ID.toBase58()}
+            <br />
+            <span style={{ opacity: 0.5 }}>Network: Solana Devnet</span>
+          </div>
+        </div>
+
+        <div className="dash-box">
+          <h5>Active</h5>
+          <span>{connected ? activeCount : "—"}</span>
+        </div>
+
+        <div className="dash-box">
+          <h5>Revoked</h5>
+          <span>{connected ? revokedCount : "—"}</span>
+        </div>
+      </div>
+    </>
+  )
 }

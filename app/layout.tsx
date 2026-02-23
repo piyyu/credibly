@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Lora } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
-
 export const metadata: Metadata = {
-  title: "Credibly Protocol",
-  description: "Academic Validation infrastructure on Solana",
+  title: "Credibly© — Tamper-Proof Academic Credentials",
+  description:
+    "Blockchain-anchored academic credential verification on Solana. Issue, anchor, and verify credentials with cryptographic proof.",
 };
 
 export default function RootLayout({
@@ -18,10 +15,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${lora.variable} font-sans bg-[#FAF9F6] text-[#49494B] antialiased`}>
-        <Providers>
-          {children}
-        </Providers>
+      <body>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

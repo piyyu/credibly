@@ -1,4 +1,4 @@
-import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
 
 export default function MainLayout({
   children,
@@ -6,13 +6,11 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-screen w-full bg-[#FAF9F6] overflow-hidden">
-      <Sidebar />
-      <main className="flex-1 h-full overflow-y-auto relative z-10 custom-scrollbar p-6 lg:p-12">
-        <div className="max-w-6xl mx-auto h-full">
-          {children}
-        </div>
-      </main>
+    <div className="dash-layout">
+      <Header />
+      <div className="dash-body">
+        {children}
+      </div>
     </div>
   );
 }

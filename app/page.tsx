@@ -1,60 +1,256 @@
 import Link from "next/link";
+import DitherCanvas from "./components/DitherCanvas";
 
 export default function LandingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#FAF9F6] relative overflow-hidden">
-
-      <header className="relative z-10 py-6 px-8 md:px-12 flex justify-between items-center w-full max-w-7xl mx-auto">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl font-serif text-[#1C1C1E] tracking-tight">Credibly</span>
-        </div>
-
-        <div className="flex items-center gap-8">
-          <a href="https://github.com" target="_blank" rel="noreferrer" className="text-[15px] font-medium text-[#49494B] hover:text-[#1C1C1E] transition-colors">Documentation</a>
-          <Link href="/dashboard" className="text-[15px] font-medium text-[#1C1C1E] border-b border-[#1C1C1E] pb-0.5 hover:text-[#D95C41] hover:border-[#D95C41] transition-all">
-            Access Portal
+    <>
+      {/* ── Header ── */}
+      <header className="site-header">
+        <Link href="/" className="logo">
+          Credibly©
+        </Link>
+        <nav className="nav-group">
+          <Link href="/verify" className="btn-pill">
+            Verify
           </Link>
-        </div>
+          <Link href="/issue" className="btn-pill">
+            Issue
+          </Link>
+          <Link href="/dashboard" className="btn-pill">
+            Dashboard
+          </Link>
+        </nav>
       </header>
 
-      <main className="relative z-10 flex-1 flex flex-col items-center justify-center px-6 w-full pt-20 pb-32">
-        <div className="max-w-[900px] w-full text-center flex flex-col items-center animate-slide-up">
-
-          <div className="inline-flex items-center gap-2 mb-8">
-            <span className="w-2 h-2 bg-[#D95C41] rounded-full"></span>
-            <span className="text-[13px] font-medium text-[#D95C41] uppercase tracking-widest">Solana Network</span>
+      {/* ── Hero ── */}
+      <section className="hero">
+        <DitherCanvas />
+        <div className="container">
+          <div className="hero-content">
+            <span className="label">Solana Devnet</span>
+            <h1 className="hero-title">
+              TAMPER
+              <br />
+              PROOF
+            </h1>
+            <p className="hero-sub">
+              Blockchain-anchored academic credentials. Cryptographic integrity
+              for every certificate, diploma, and transcript — verified
+              instantly on Solana.
+            </p>
+            <Link href="/issue" className="link-small">
+              ISSUE CREDENTIAL ⊕
+            </Link>
           </div>
+        </div>
+      </section>
 
-          <h1 className="text-5xl md:text-[80px] font-serif tracking-tight leading-[1.05] mb-8 text-[#1C1C1E]">
-            Immutable records, <br />
-            <span className="text-[#8A8985] italic">elegantly verified.</span>
-          </h1>
+      {/* ── Feature Strip ── */}
+      <section className="feature-strip border-top">
+        <div className="container">
+          <div className="grid-12">
+            <div className="stat-grid">
+              <div className="stat-item">
+                <span className="label">Hashing</span>
+                <p className="stat-desc">
+                  SHA-256 document fingerprinting ensures every credential is
+                  uniquely and permanently identifiable.
+                </p>
+              </div>
+              <div className="stat-item">
+                <span className="label">On-Chain</span>
+                <p className="stat-desc">
+                  Credential hashes stored via Solana PDA accounts with Anchor
+                  framework — immutable by design.
+                </p>
+              </div>
+              <div className="stat-item" style={{ textAlign: "right" }}>
+                <span className="label">Status</span>
+                <p className="stat-desc">Network: Active</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <p className="text-lg md:text-[22px] text-[#49494B] mb-14 max-w-2xl leading-relaxed font-light">
-            A research-driven infrastructure to issue and immediately authenticate academic and institutional records on-chain.
+      {/* ── Big Text / Philosophy ── */}
+      <section className="big-text-section border-top">
+        <div className="container">
+          <div className="grid-12">
+            <div style={{ gridColumn: "span 3" }}>
+              <span className="label">Why Credibly</span>
+            </div>
+            <div className="big-copy">
+              Eliminating the{" "}
+              <span className="highlight">trust deficit</span> in academic
+              verification. We replace fragile paper trails with{" "}
+              <span className="highlight">cryptographic proof</span> — turning
+              every credential into an{" "}
+              <span className="highlight">immutable on-chain record</span> that
+              anyone can verify in seconds.
+              <br />
+              <br />
+              <Link
+                href="/verify"
+                className="link-small"
+                style={{ marginTop: "1rem" }}
+              >
+                VERIFY A CREDENTIAL ⊕
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Process / How It Works ── */}
+      <section className="process-section border-top">
+        <div className="container">
+          <div style={{ marginBottom: "4rem" }}>
+            <span className="label">Protocol</span>
+            <h2 style={{ fontSize: "2.5rem", fontWeight: 400 }}>
+              How It Works
+            </h2>
+          </div>
+          <div className="grid-12">
+            <div className="process-grid">
+              <div className="process-card">
+                <div className="process-number">Step 01</div>
+                <h3 className="process-title">Issue</h3>
+                <p className="process-desc">
+                  Upload an academic document. Credibly computes a SHA-256 hash
+                  of the file and prepares an on-chain transaction signed by the
+                  issuer&apos;s wallet.
+                </p>
+              </div>
+              <div className="process-card">
+                <div className="process-number">Step 02</div>
+                <h3 className="process-title">Anchor</h3>
+                <p className="process-desc">
+                  The credential hash is stored in a Solana Program Derived
+                  Address (PDA) via the Anchor framework — creating a
+                  permanent, tamper-proof record on the blockchain.
+                </p>
+              </div>
+              <div className="process-card">
+                <div className="process-number">Step 03</div>
+                <h3 className="process-title">Verify</h3>
+                <p className="process-desc">
+                  Anyone can upload the same document or paste its hash.
+                  Credibly checks the blockchain to confirm authenticity,
+                  issuer identity, and revocation status.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Visual / Interactive Section ── */}
+      <section className="visual-section">
+        <Link href="/issue" className="circle-trigger">
+          Start
+          <br />
+          Issuing
+        </Link>
+        <div style={{ position: "absolute", bottom: "2rem", left: "2rem" }}>
+          <span className="label">Credential Registry</span>
+        </div>
+        <div style={{ position: "absolute", bottom: "2rem", right: "2rem" }}>
+          <Link href="/dashboard" className="link-small">
+            VIEW DASHBOARD ⊕
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Technology Numbers ── */}
+      <section className="tech-section border-top">
+        <div className="container">
+          <div style={{ marginBottom: "4rem" }}>
+            <span className="label">Infrastructure</span>
+          </div>
+          <div className="grid-12">
+            <div className="tech-grid">
+              <div className="tech-item">
+                <div className="tech-value">256</div>
+                <div className="tech-label">Bit SHA Hashing</div>
+              </div>
+              <div className="tech-item">
+                <div className="tech-value">400ms</div>
+                <div className="tech-label">Solana Block Time</div>
+              </div>
+              <div className="tech-item">
+                <div className="tech-value">PDA</div>
+                <div className="tech-label">Program Derived Accounts</div>
+              </div>
+              <div className="tech-item">
+                <div className="tech-value">∞</div>
+                <div className="tech-label">On-Chain Permanence</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA Section ── */}
+      <section className="cta-section border-top">
+        <div className="container">
+          <span className="label">Get Started</span>
+          <h2 className="cta-title">
+            Build Trust
+            <br />
+            On-Chain
+          </h2>
+          <p className="cta-sub">
+            Issue tamper-proof academic credentials. Verify instantly against
+            the Solana blockchain. No intermediaries.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-            <Link href="/dashboard" className="btn-primary">
-              Initialize Subsystem
+          <div className="cta-buttons">
+            <Link href="/issue" className="btn-pill">
+              Issue Credentials
             </Link>
-            <Link href="/verify" className="btn-secondary">
-              Verification Engine
+            <Link href="/verify" className="btn-pill">
+              Verify Document
             </Link>
           </div>
-
         </div>
+      </section>
 
-        {/* Abstract Soft Geometry */}
-        <div className="w-full max-w-4xl mt-32 relative flex justify-center opacity-60">
-          <div className="w-full h-[1px] bg-gradient-to-r from-transparent via-[#E8E6DF] to-transparent mb-12"></div>
-          <div className="absolute top-[-10px] w-5 h-5 border border-[#E8E6DF] rounded-full bg-[#FAF9F6]"></div>
+      {/* ── Footer ── */}
+      <footer className="site-footer border-top">
+        <div className="container">
+          <div className="grid-12">
+            <div className="footer-col" style={{ gridColumn: "span 6" }}>
+              <h3 style={{ marginBottom: "1rem" }}>Credibly©</h3>
+              <p style={{ color: "#666", maxWidth: 300 }}>
+                On-chain academic credential verification built on Solana.
+                Powered by Anchor &amp; SHA-256 cryptographic hashing.
+              </p>
+            </div>
+            <div className="footer-col">
+              <div className="footer-header">Platform</div>
+              <Link href="/issue" className="footer-link">
+                Issue
+              </Link>
+              <Link href="/verify" className="footer-link">
+                Verify
+              </Link>
+              <Link href="/dashboard" className="footer-link">
+                Dashboard
+              </Link>
+            </div>
+            <div className="footer-col">
+              <div className="footer-header">Technology</div>
+              <span className="footer-link">Solana</span>
+              <span className="footer-link">Anchor Framework</span>
+              <span className="footer-link">SHA-256</span>
+            </div>
+          </div>
+          <div className="border-top footer-bottom">
+            <span>©2025 CREDIBLY. SOLANA DEVNET.</span>
+            <span>TAMPER-PROOF CREDENTIALS</span>
+          </div>
         </div>
-      </main>
-
-      <footer className="py-10 text-center text-[#8A8985] text-[13px] font-medium border-t border-[#E8E6DF] bg-[#FAF9F6] relative z-20">
-        © {new Date().getFullYear()} Credibly Protocol &mdash; Open State Architecture
       </footer>
-    </div>
+    </>
   );
 }

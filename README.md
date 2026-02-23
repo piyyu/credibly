@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Credibly© — Tamper-Proof Academic Credentials on Solana
+
+Blockchain-anchored academic credential verification. Issue, anchor, and verify credentials with cryptographic proof — powered by Solana, Anchor, and SHA-256.
+
+## Architecture
+
+| Layer | Stack |
+|-------|-------|
+| Frontend | Next.js 16, React 19, Tailwind CSS 4 |
+| Wallet | Solana Wallet Adapter (Phantom + standard wallets) |
+| On-Chain | Anchor framework, Solana Devnet |
+| Hashing | SHA-256 via Web Crypto API |
+
+## Project Structure
+
+```
+app/
+  (main)/                  # Shared layout with header + wallet
+    dashboard/page.tsx     # Live on-chain credential list, revoke
+    issue/page.tsx         # Upload → hash → anchor credential
+    verify/page.tsx        # Verify by hash or file upload
+    credential/[hash]/     # Detail page with QR code sharing
+  page.tsx                 # Landing page
+components/
+  Header.tsx               # Nav bar with wallet badge
+  Providers.tsx            # Solana + Toast context providers
+  ui/
+    WalletBadge.tsx        # Connect / disconnect / copy address
+    HashDisplay.tsx        # Hash display with copy-to-clipboard
+    Toast.tsx              # Toast notification system
+    GlassCard.tsx, ...     # Reusable UI primitives
+lib/
+  hash.ts                  # SHA-256 file hashing utilities
+  program.ts               # Anchor IDL, Program ID, PDA derivation
+programs/
+  credential_registry/     # Solana/Anchor program (Rust)
+tests/
+  credential_registry.js   # Anchor tests (issue, revoke, auth, dupes)
+```
+
+## Solana Program
+
+The `credential_registry` program provides two instructions:
+
+- **`issue_credential(hash)`** — Creates a PDA seeded by `["credential", hash]`. Stores issuer pubkey, document hash, and revocation status.
+- **`revoke_credential(hash)`** — Marks an existing credential as revoked. Only the original issuer can revoke.
+
+Program ID: `E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU`
+
+## Phase 1 — Core MVP ✅
+
+- [x] Solana program with issue + revoke instructions
+- [x] SHA-256 document hashing (client-side)
+- [x] Issue page with real on-chain transactions
+- [x] Verify page with on-chain PDA lookup (hash or file)
+- [x] Dashboard with live credential list from chain
+- [x] Wallet connect / disconnect / copy address
+- [x] Anchor tests (issue, revoke, unauthorized revoke, duplicate prevention)
+
+## Phase 2 — Enhanced UX ✅
+
+- [x] Unified app layout with shared header + wallet across all pages
+- [x] Revoke credentials directly from dashboard
+- [x] Credential detail page (`/credential/[hash]`) with QR code sharing
+- [x] Toast notification system for success/error feedback
+- [x] Copy-to-clipboard on all hash displays
+- [x] Wallet dropdown with address copy + disconnect
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Install dependencies
+npm install
+
+# Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Run Anchor tests (requires solana-test-validator)
+anchor test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## License
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
