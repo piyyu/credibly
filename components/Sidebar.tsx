@@ -13,52 +13,48 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="w-64 h-full glass-panel flex flex-col justify-between p-6">
+    <aside className="w-56 h-full bg-white border-r border-[#e2e8f0] flex flex-col justify-between py-6 px-4">
       <div>
-        <Link href="/" className="flex items-center gap-3 mb-10 hover:opacity-80 transition-opacity">
-          <div className="w-8 h-8 rounded-lg bg-gradient-solana flex items-center justify-center shadow-glow">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#07070a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 17L12 22L22 17" stroke="#07070a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M2 12L12 17L22 12" stroke="#07070a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <Link href="/" className="flex items-center gap-2 mb-8 px-2 hover:opacity-80 transition-opacity">
+          <div className="w-6 h-6 bg-[#0a2540] flex items-center justify-center">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#ffffff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
+              <path d="M2 17L12 22L22 17" stroke="#ffffff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
+              <path d="M2 12L12 17L22 12" stroke="#ffffff" strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter" />
             </svg>
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">Credibly</span>
+          <span className="text-lg font-bold tracking-tight text-[#0a2540]">Credibly</span>
         </Link>
 
-        <nav className="flex flex-col gap-2">
-          <div className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2 px-2">Menu</div>
+        <nav className="flex flex-col gap-1">
           {links.map((link) => {
             const isActive = pathname === link.href;
             return (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive
-                    ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.1)] border border-white/5"
-                    : "text-zinc-400 hover:bg-white/5 hover:text-zinc-200"
+                className={`flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors ${isActive
+                  ? "bg-[#f3f4f6] text-[#0a2540] font-semibold"
+                  : "text-[#425466] hover:bg-[#f8fafc] hover:text-[#0a2540]"
                   }`}
               >
-                <span className={isActive ? "text-[#14F195]" : "opacity-60"}>{link.icon}</span>
+                <span className={isActive ? "text-[#635bff]" : "text-[#94a3b8]"}>{link.icon}</span>
                 {link.label}
-                {isActive && (
-                  <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[#14F195] shadow-[0_0_8px_#14F195]"></span>
-                )}
               </Link>
             );
           })}
         </nav>
       </div>
 
-      <div className="mt-8 pt-6 border-t border-white/10">
-        <div className="flex items-center gap-3 bg-black/40 p-3 rounded-xl border border-white/5">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center text-xs font-bold text-white border border-white/10">
+      <div className="mt-8 pt-4 border-t border-[#e2e8f0]">
+        <div className="flex items-center gap-3 p-2 hover:bg-[#f8fafc] cursor-pointer transition-colors">
+          <div className="w-8 h-8 bg-[#e2e8f0] flex items-center justify-center text-xs font-bold text-[#0a2540]">
             AD
           </div>
           <div>
-            <div className="text-sm font-bold text-white leading-tight">Registry Admin</div>
-            <div className="text-xs text-[#14F195] font-medium flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#14F195] animate-pulse"></span>
+            <div className="text-sm font-semibold text-[#0a2540] leading-tight">Registry Admin</div>
+            <div className="text-[11px] text-[#64748b] font-medium flex items-center gap-1 mt-0.5">
+              <span className="w-1.5 h-1.5 bg-[#10b981]"></span>
               Connected
             </div>
           </div>
