@@ -6,14 +6,18 @@ import { useWallet } from "@solana/wallet-adapter-react"
 import { useConnection } from "@solana/wallet-adapter-react"
 import { PublicKey } from "@solana/web3.js"
 import { Program, AnchorProvider, setProvider } from "@coral-xyz/anchor"
-import { PROGRAM_ID, PROGRAM_IDL, deriveCredentialPDA } from "@/lib/program"
+import { PROGRAM_ID, PROGRAM_IDL, deriveCredentialPDA, ACCOUNT_SIZE, decodeCredentialAccount, credentialTypeLabel } from "@/lib/program"
 import { hexToUint8Array } from "@/lib/hash"
 import { useToast } from "@/components/ui/Toast"
+import { getAllMetadata, type CredentialMetadata } from "@/lib/metadata"
 
 interface CredentialAccount {
   pubkey: string
   issuer: string
+  recipient: string
   hash: string
+  issuedAt: number
+  credentialType: number
   revoked: boolean
 }
 
@@ -25,6 +29,7 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false)
   const [revoking, setRevoking] = useState<string | null>(null) // hash of credential being revoked
   const [filter, setFilter] = useState<"all" | "active" | "revoked">("all")
+  const [metaMap, setMetaMap] = useState<Record<string, CredentialMetadata>>({})
 
   const fetchCredentials = useCallback(async () => {
     if (!connected || !publicKey) return
@@ -33,7 +38,7 @@ export default function DashboardPage() {
     try {
       const accounts = await connection.getProgramAccounts(PROGRAM_ID, {
         filters: [
-          { dataSize: 80 },
+          { dataSize: ACCOUNT_SIZE },
           {
             memcmp: {
               offset: 8,
@@ -44,25 +49,15 @@ export default function DashboardPage() {
       })
 
       const decoded: CredentialAccount[] = accounts.map((acc) => {
-        const data = acc.account.data
-        const issuerBytes = data.slice(8, 40)
-        const hashBytes = data.slice(40, 72)
-        const revoked = data[72] === 1
-
-        const issuer = new PublicKey(issuerBytes).toBase58()
-        const hash = Array.from(hashBytes)
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("")
-
+        const cred = decodeCredentialAccount(acc.account.data)
         return {
           pubkey: acc.pubkey.toBase58(),
-          issuer,
-          hash,
-          revoked,
+          ...cred,
         }
       })
 
       setCredentials(decoded)
+      setMetaMap(getAllMetadata())
     } catch (err) {
       console.error("Error fetching credentials:", err)
     } finally {
@@ -216,10 +211,20 @@ export default function DashboardPage() {
                 {cred.revoked ? "✕" : "📄"}
               </div>
               <Link href={`/credential/${cred.hash}`} className="dash-list-details" style={{ textDecoration: "none", color: "inherit" }}>
-                <h4 style={{ fontFamily: "monospace", fontSize: "0.8rem" }}>
-                  {cred.hash.slice(0, 16)}...{cred.hash.slice(-16)}
+                <h4 style={{ fontFamily: metaMap[cred.hash]?.title ? "var(--font-main)" : "monospace", fontSize: "0.8rem" }}>
+                  {metaMap[cred.hash]?.title || `${cred.hash.slice(0, 16)}...${cred.hash.slice(-16)}`}
                 </h4>
-                <p>PDA: {cred.pubkey.slice(0, 8)}...{cred.pubkey.slice(-8)}</p>
+                <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+                  <span className={`type-badge type-${cred.credentialType}`} style={{ fontSize: "0.65rem" }}>
+                    {credentialTypeLabel(cred.credentialType)}
+                  </span>
+                  <span style={{ fontSize: "0.7rem", opacity: 0.6 }}>
+                    {new Date(cred.issuedAt * 1000).toLocaleDateString()}
+                  </span>
+                  <span style={{ fontSize: "0.7rem", opacity: 0.5 }}>
+                    → {cred.recipient.slice(0, 6)}...{cred.recipient.slice(-4)}
+                  </span>
+                </div>
               </Link>
               <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <span

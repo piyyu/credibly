@@ -17,35 +17,39 @@ Blockchain-anchored academic credential verification. Issue, anchor, and verify 
 app/
   (main)/                  # Shared layout with header + wallet
     dashboard/page.tsx     # Live on-chain credential list, revoke
-    issue/page.tsx         # Upload → hash → anchor credential
+    issue/page.tsx         # Upload → hash → anchor credential (with metadata)
     verify/page.tsx        # Verify by hash or file upload
+    my-credentials/page.tsx # Recipient view — credentials issued to you
     credential/[hash]/     # Detail page with QR code sharing
   page.tsx                 # Landing page
 components/
-  Header.tsx               # Nav bar with wallet badge
-  Providers.tsx            # Solana + Toast context providers
+  Header.tsx               # Nav bar with wallet badge + network selector
+  Providers.tsx            # Solana + Toast + Network context providers
   ui/
     WalletBadge.tsx        # Connect / disconnect / copy address
+    NetworkSelector.tsx    # Devnet / Mainnet toggle
     HashDisplay.tsx        # Hash display with copy-to-clipboard
     Toast.tsx              # Toast notification system
     GlassCard.tsx, ...     # Reusable UI primitives
 lib/
   hash.ts                  # SHA-256 file hashing utilities
-  program.ts               # Anchor IDL, Program ID, PDA derivation
+  program.ts               # Anchor IDL, Program ID, PDA derivation, account decoder
 programs/
   credential_registry/     # Solana/Anchor program (Rust)
 tests/
-  credential_registry.js   # Anchor tests (issue, revoke, auth, dupes)
+  credential_registry.js   # Anchor tests (issue, revoke, auth, dupes, types)
 ```
 
 ## Solana Program
 
 The `credential_registry` program provides two instructions:
 
-- **`issue_credential(hash)`** — Creates a PDA seeded by `["credential", hash]`. Stores issuer pubkey, document hash, and revocation status.
+- **`issue_credential(hash, recipient, credential_type)`** — Creates a PDA seeded by `["credential", hash]`. Stores issuer pubkey, recipient pubkey, document hash, issued_at timestamp, credential type (0-4), and revocation status.
 - **`revoke_credential(hash)`** — Marks an existing credential as revoked. Only the original issuer can revoke.
 
-Program ID: `E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU`
+Credential types: `0` Diploma · `1` Certificate · `2` Transcript · `3` License · `4` Other
+
+Program ID: `F4wFketKAQzZUTcHLET6QtRz9DYejhKVVdwwSLFcGB8C`
 
 ## Phase 1 — Core MVP ✅
 
@@ -66,16 +70,18 @@ Program ID: `E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU`
 - [x] Copy-to-clipboard on all hash displays
 - [x] Wallet dropdown with address copy + disconnect
 
-## Phase 3 — Real-World Readiness (Planned)
+## Phase 3 — Real-World Readiness ✅
 
-- [ ] **On-chain metadata** — Add `issued_at` timestamp, `recipient` pubkey, and `credential_type` to the Solana program
-- [ ] **Recipient experience** — `/my-credentials` page for recipients to view credentials issued to them
-- [ ] **Shareable certificates** — Downloadable verifiable credential PDF with embedded QR code
-- [ ] **Batch issuance** — Multi-file upload for bulk credential anchoring (graduation use case)
-- [ ] **Network selector** — Devnet / Mainnet-beta toggle with environment-based program IDs
-- [ ] **Off-chain metadata** — Store human-readable info (student name, institution, title) on IPFS/Arweave keyed by on-chain hash
-- [ ] **SOL balance check** — Pre-flight balance validation before issuing to prevent confusing errors
-- [ ] **Transaction confirmation UX** — Show block confirmations in real-time, not just success/fail
+- [x] **On-chain metadata** — `issued_at` timestamp, `recipient` pubkey, and `credential_type` (Diploma/Certificate/Transcript/License/Other) stored on-chain
+- [x] **Recipient experience** — `/my-credentials` page for recipients to view credentials issued to them (memcmp filter on recipient pubkey)
+- [x] **Network selector** — Devnet / Mainnet-beta toggle with dynamic RPC endpoint (persists to localStorage)
+- [x] **SOL balance check** — Pre-flight balance validation on issue page with low-balance warning
+- [x] **Transaction confirmation UX** — Multi-stage progress indicator (hashing → submitting → confirming → finalized)
+- [x] **Credential type system** — 5 types with color-coded badges across all views
+- [x] **Recipient field** — Assign credentials to specific wallet addresses during issuance
+- [x] **Shareable certificates** — Downloadable verifiable credential PDF with embedded QR code
+- [x] **Batch issuance** — Multi-file upload for bulk credential anchoring (graduation use case)
+- [x] **Off-chain metadata** — Store human-readable info (student name, institution, title) on IPFS/Arweave keyed by on-chain hash
 
 ## Getting Started
 

@@ -72,6 +72,14 @@ export type CredentialRegistry = {
               32
             ]
           }
+        },
+        {
+          "name": "recipient",
+          "type": "pubkey"
+        },
+        {
+          "name": "credentialType",
+          "type": "u8"
         }
       ]
     },
@@ -153,16 +161,38 @@ export type CredentialRegistry = {
       "code": 6000,
       "name": "unauthorizedRevocation",
       "msg": "Only the original issuer can revoke this credential."
+    },
+    {
+      "code": 6001,
+      "name": "invalidCredentialType",
+      "msg": "Invalid credential type. Must be 0–4 (Diploma, Certificate, Transcript, License, Other)."
     }
   ],
   "types": [
     {
       "name": "credential",
+      "docs": [
+        "On-chain credential record with full metadata.",
+        "",
+        "Layout (Borsh-serialized, field order):",
+        "[0..7]     discriminator   (8 bytes)",
+        "[8..39]    issuer           (32 bytes — Pubkey)",
+        "[40..71]   recipient        (32 bytes — Pubkey)",
+        "[72..103]  hash             (32 bytes — [u8; 32])",
+        "[104..111] issued_at        (8 bytes  — i64 unix timestamp)",
+        "[112]      credential_type  (1 byte   — u8 enum 0-4)",
+        "[113]      revoked          (1 byte   — bool)",
+        "Total: 114 bytes"
+      ],
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "issuer",
+            "type": "pubkey"
+          },
+          {
+            "name": "recipient",
             "type": "pubkey"
           },
           {
@@ -173,6 +203,14 @@ export type CredentialRegistry = {
                 32
               ]
             }
+          },
+          {
+            "name": "issuedAt",
+            "type": "i64"
+          },
+          {
+            "name": "credentialType",
+            "type": "u8"
           },
           {
             "name": "revoked",

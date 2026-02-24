@@ -7,17 +7,21 @@ export default function LandingPage() {
       {/* ── Header ── */}
       <header className="site-header">
         <Link href="/" className="logo">
-          Credibly©
+          <span className="logo-icon">C</span>
+          Credibly
         </Link>
+        <nav className="nav-center">
+          <a href="#how-it-works" className="nav-link">How It Works</a>
+          <a href="#features" className="nav-link">Features</a>
+          <a href="#technology" className="nav-link">Technology</a>
+          <a href="#about" className="nav-link">About</a>
+        </nav>
         <nav className="nav-group">
-          <Link href="/verify" className="btn-pill">
-            Verify
-          </Link>
-          <Link href="/issue" className="btn-pill">
-            Issue
-          </Link>
           <Link href="/dashboard" className="btn-pill">
-            Dashboard
+            Dashboard ↗
+          </Link>
+          <Link href="/issue" className="btn-primary">
+            Get Started ↗
           </Link>
         </nav>
       </header>
@@ -25,28 +29,156 @@ export default function LandingPage() {
       {/* ── Hero ── */}
       <section className="hero">
         <DitherCanvas />
-        <div className="container">
-          <div className="hero-content">
-            <span className="label">Solana Devnet</span>
-            <h1 className="hero-title">
-              TAMPER
-              <br />
-              PROOF
-            </h1>
-            <p className="hero-sub">
-              Blockchain-anchored academic credentials. Cryptographic integrity
-              for every certificate, diploma, and transcript — verified
-              instantly on Solana.
-            </p>
-            <Link href="/issue" className="link-small">
-              ISSUE CREDENTIAL ⊕
+        <div className="hero-content">
+          <div className="hero-badge">
+            <span className="hero-badge-dot" />
+            Solana Devnet · Live
+          </div>
+          <h1 className="hero-title">
+            Tamper-Proof Credential
+            <br />
+            Verification at Your
+            <br />
+            Fingertips
+          </h1>
+          <p className="hero-sub">
+            Simplify academic credential issuance, verification, and management
+            with one powerful blockchain-anchored platform.
+          </p>
+          <div className="hero-cta-group">
+            <Link href="/issue" className="btn-primary">
+              Get Started Now ↗
             </Link>
+            <Link href="/verify" className="btn-pill">
+              Verify Credential
+            </Link>
+          </div>
+
+          {/* Dashboard Preview */}
+          <div className="dashboard-preview">
+            <div className="preview-header">
+              <span className="preview-dot" />
+              <span className="preview-dot" />
+              <span className="preview-dot" />
+            </div>
+            <div className="preview-body">
+              {/* Sidebar */}
+              <div className="preview-sidebar">
+                <div className="preview-sidebar-item active">
+                  <span>◉</span> Dashboard
+                </div>
+                <div className="preview-sidebar-item">
+                  <span>◎</span> Issue
+                </div>
+                <div className="preview-sidebar-item">
+                  <span>◎</span> Verify
+                </div>
+                <div className="preview-sidebar-item">
+                  <span>◎</span> My Credentials
+                </div>
+                <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "0.5rem" }}>
+                  <div className="preview-sidebar-item">
+                    <span>⚙</span> Settings
+                  </div>
+                </div>
+              </div>
+              {/* Main Area */}
+              <div className="preview-main">
+                <div className="preview-stats-row">
+                  <div className="preview-stat-card">
+                    <div className="preview-stat-label">Credentials</div>
+                    <div className="preview-stat-value">
+                      1,456
+                      <span className="preview-stat-badge">+12%</span>
+                    </div>
+                  </div>
+                  <div className="preview-stat-card">
+                    <div className="preview-stat-label">Verified</div>
+                    <div className="preview-stat-value">
+                      652
+                      <span className="preview-stat-badge">+8%</span>
+                    </div>
+                  </div>
+                  <div className="preview-stat-card">
+                    <div className="preview-stat-label">Institutions</div>
+                    <div className="preview-stat-value">
+                      89
+                      <span className="preview-stat-badge">+5%</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="preview-table">
+                  <div className="preview-table-header">
+                    <span>Credential</span>
+                    <span>Type</span>
+                    <span>Issued</span>
+                    <span>Status</span>
+                  </div>
+                  <div className="preview-table-row">
+                    <span>Bachelor of CS</span>
+                    <span>Diploma</span>
+                    <span>Jan 15, 2026</span>
+                    <span className="preview-active-badge">● Active</span>
+                  </div>
+                  <div className="preview-table-row">
+                    <span>Data Science Certificate</span>
+                    <span>Certificate</span>
+                    <span>Dec 8, 2025</span>
+                    <span className="preview-active-badge">● Active</span>
+                  </div>
+                  <div className="preview-table-row">
+                    <span>Graduate Transcript</span>
+                    <span>Transcript</span>
+                    <span>Nov 20, 2025</span>
+                    <span className="preview-active-badge">● Active</span>
+                  </div>
+                  <div className="preview-table-row">
+                    <span>Spring 2025 Grades</span>
+                    <span>Transcript</span>
+                    <span>Oct 5, 2025</span>
+                    <span className="preview-revoked-badge">● Revoked</span>
+                  </div>
+                  <div className="preview-table-row">
+                    <span>AWS Cloud Practitioner</span>
+                    <span>License</span>
+                    <span>Sep 18, 2025</span>
+                    <span className="preview-active-badge">● Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Brands / Powered By – Marquee ── */}
+      <section className="brands-section">
+        <p className="brands-label">Powered By</p>
+        <div className="brands-marquee-wrap">
+          <div className="brands-marquee">
+            <span className="brand-item">Solana</span>
+            <span className="brand-item">Anchor</span>
+            <span className="brand-item">SHA-256</span>
+            <span className="brand-item">Next.js</span>
+            <span className="brand-item">Phantom</span>
+            <span className="brand-item">Rust</span>
+            <span className="brand-item">Web3.js</span>
+            <span className="brand-item">TypeScript</span>
+            {/* duplicate for seamless loop */}
+            <span className="brand-item">Solana</span>
+            <span className="brand-item">Anchor</span>
+            <span className="brand-item">SHA-256</span>
+            <span className="brand-item">Next.js</span>
+            <span className="brand-item">Phantom</span>
+            <span className="brand-item">Rust</span>
+            <span className="brand-item">Web3.js</span>
+            <span className="brand-item">TypeScript</span>
           </div>
         </div>
       </section>
 
       {/* ── Feature Strip ── */}
-      <section className="feature-strip border-top">
+      <section id="features" className="feature-strip border-top">
         <div className="container">
           <div className="grid-12">
             <div className="stat-grid">
@@ -64,9 +196,12 @@ export default function LandingPage() {
                   framework — immutable by design.
                 </p>
               </div>
-              <div className="stat-item" style={{ textAlign: "right" }}>
-                <span className="label">Status</span>
-                <p className="stat-desc">Network: Active</p>
+              <div className="stat-item">
+                <span className="label">Instant Verification</span>
+                <p className="stat-desc">
+                  Verify any credential in seconds. Upload a document or paste a hash
+                  to check blockchain authenticity.
+                </p>
               </div>
             </div>
           </div>
@@ -74,7 +209,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Big Text / Philosophy ── */}
-      <section className="big-text-section border-top">
+      <section id="about" className="big-text-section border-top">
         <div className="container">
           <div className="grid-12">
             <div style={{ gridColumn: "span 3" }}>
@@ -90,12 +225,8 @@ export default function LandingPage() {
               anyone can verify in seconds.
               <br />
               <br />
-              <Link
-                href="/verify"
-                className="link-small"
-                style={{ marginTop: "1rem" }}
-              >
-                VERIFY A CREDENTIAL ⊕
+              <Link href="/verify" className="link-small" style={{ marginTop: "1rem" }}>
+                Verify a Credential →
               </Link>
             </div>
           </div>
@@ -103,11 +234,11 @@ export default function LandingPage() {
       </section>
 
       {/* ── Process / How It Works ── */}
-      <section className="process-section border-top">
+      <section id="how-it-works" className="process-section border-top">
         <div className="container">
           <div style={{ marginBottom: "4rem" }}>
             <span className="label">Protocol</span>
-            <h2 style={{ fontSize: "2.5rem", fontWeight: 400 }}>
+            <h2 style={{ fontSize: "2.5rem", fontWeight: 700 }}>
               How It Works
             </h2>
           </div>
@@ -157,13 +288,13 @@ export default function LandingPage() {
         </div>
         <div style={{ position: "absolute", bottom: "2rem", right: "2rem" }}>
           <Link href="/dashboard" className="link-small">
-            VIEW DASHBOARD ⊕
+            View Dashboard →
           </Link>
         </div>
       </section>
 
       {/* ── Technology Numbers ── */}
-      <section className="tech-section border-top">
+      <section id="technology" className="tech-section border-top">
         <div className="container">
           <div style={{ marginBottom: "4rem" }}>
             <span className="label">Infrastructure</span>
@@ -205,8 +336,8 @@ export default function LandingPage() {
             the Solana blockchain. No intermediaries.
           </p>
           <div className="cta-buttons">
-            <Link href="/issue" className="btn-pill">
-              Issue Credentials
+            <Link href="/issue" className="btn-primary">
+              Issue Credentials ↗
             </Link>
             <Link href="/verify" className="btn-pill">
               Verify Document
@@ -216,38 +347,37 @@ export default function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="site-footer border-top">
+      <footer className="site-footer">
         <div className="container">
           <div className="grid-12">
             <div className="footer-col" style={{ gridColumn: "span 6" }}>
-              <h3 style={{ marginBottom: "1rem" }}>Credibly©</h3>
-              <p style={{ color: "#666", maxWidth: 300 }}>
+              <h3 style={{ marginBottom: "1rem", fontWeight: 700, fontSize: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span className="logo-icon" style={{ width: 24, height: 24, fontSize: "0.7rem", borderRadius: 6 }}>C</span>
+                Credibly
+              </h3>
+              <p style={{ color: "var(--text-dim)", maxWidth: 340, lineHeight: 1.6, fontSize: "0.9rem" }}>
                 On-chain academic credential verification built on Solana.
                 Powered by Anchor &amp; SHA-256 cryptographic hashing.
               </p>
             </div>
             <div className="footer-col">
               <div className="footer-header">Platform</div>
-              <Link href="/issue" className="footer-link">
-                Issue
-              </Link>
-              <Link href="/verify" className="footer-link">
-                Verify
-              </Link>
-              <Link href="/dashboard" className="footer-link">
-                Dashboard
-              </Link>
+              <Link href="/issue" className="footer-link">Issue</Link>
+              <Link href="/verify" className="footer-link">Verify</Link>
+              <Link href="/dashboard" className="footer-link">Dashboard</Link>
+              <Link href="/my-credentials" className="footer-link">My Credentials</Link>
             </div>
             <div className="footer-col">
               <div className="footer-header">Technology</div>
               <span className="footer-link">Solana</span>
               <span className="footer-link">Anchor Framework</span>
               <span className="footer-link">SHA-256</span>
+              <span className="footer-link">Next.js</span>
             </div>
           </div>
-          <div className="border-top footer-bottom">
-            <span>©2025 CREDIBLY. SOLANA DEVNET.</span>
-            <span>TAMPER-PROOF CREDENTIALS</span>
+          <div className="footer-bottom">
+            <span>© 2026 Credibly. Solana Devnet.</span>
+            <span>Tamper-Proof Credentials</span>
           </div>
         </div>
       </footer>

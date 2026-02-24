@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { WalletBadge } from "@/components/ui/WalletBadge";
+import { NetworkSelector } from "@/components/ui/NetworkSelector";
 
 export default function Header() {
   const pathname = usePathname();
@@ -10,7 +11,8 @@ export default function Header() {
   return (
     <header className="dash-header">
       <Link href="/" className="dash-logo">
-        Credibly©
+        <span className="logo-icon">C</span>
+        Credibly
       </Link>
 
       <nav className="dash-nav">
@@ -32,9 +34,18 @@ export default function Header() {
         >
           Verify
         </Link>
+        <Link
+          href="/my-credentials"
+          className={`dash-nav-item ${pathname === "/my-credentials" ? "active" : ""}`}
+        >
+          My Credentials
+        </Link>
       </nav>
 
-      <WalletBadge />
+      <div className="header-right">
+        <NetworkSelector />
+        <WalletBadge />
+      </div>
     </header>
   );
 }

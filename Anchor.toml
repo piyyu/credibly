@@ -6,7 +6,7 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-credential_registry = "E4LCAmhHxUgViNTw8DKQ7kiikdnx5bVUSv9s6KGLuqkU"
+credential_registry = "F4wFketKAQzZUTcHLET6QtRz9DYejhKVVdwwSLFcGB8C"
 
 [registry]
 url = "https://api.apr.dev"

@@ -4,15 +4,14 @@ import { useMemo } from "react";
 import { ConnectionProvider, WalletProvider } from "@solana/wallet-adapter-react";
 import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import { PhantomWalletAdapter } from "@solana/wallet-adapter-wallets";
-import { clusterApiUrl } from "@solana/web3.js";
 import { ToastProvider } from "@/components/ui/Toast";
+import { NetworkProvider, useNetwork } from "@/components/ui/NetworkSelector";
 
 // Default styles that can be overridden by your app
 import "@solana/wallet-adapter-react-ui/styles.css";
 
-export function Providers({ children }: { children: React.ReactNode }) {
-    // We strictly use devnet for the MVP
-    const endpoint = useMemo(() => clusterApiUrl("devnet"), []);
+function SolanaProviders({ children }: { children: React.ReactNode }) {
+    const { rpcEndpoint } = useNetwork();
 
     const wallets = useMemo(
         () => [
@@ -22,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     );
 
     return (
-        <ConnectionProvider endpoint={endpoint}>
+        <ConnectionProvider endpoint={rpcEndpoint}>
             <WalletProvider wallets={wallets} autoConnect>
                 <WalletModalProvider>
                     <ToastProvider>
@@ -31,5 +30,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 </WalletModalProvider>
             </WalletProvider>
         </ConnectionProvider>
+    );
+}
+
+export function Providers({ children }: { children: React.ReactNode }) {
+    return (
+        <NetworkProvider>
+            <SolanaProviders>
+                {children}
+            </SolanaProviders>
+        </NetworkProvider>
     );
 }

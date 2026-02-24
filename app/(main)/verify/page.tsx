@@ -5,7 +5,7 @@ import { useConnection } from "@solana/wallet-adapter-react"
 
 import { HashDisplay } from "@/components/ui/HashDisplay"
 import { hashHex, hexToUint8Array } from "@/lib/hash"
-import { deriveCredentialPDA } from "@/lib/program"
+import { deriveCredentialPDA, decodeCredentialAccount, credentialTypeLabel } from "@/lib/program"
 import { useToast } from "@/components/ui/Toast"
 import Link from "next/link"
 
@@ -13,7 +13,10 @@ type VerifyStatus = "idle" | "verifying" | "valid" | "revoked" | "not_found"
 
 interface CredentialResult {
   issuer: string
+  recipient: string
   hash: string
+  issuedAt: number
+  credentialType: number
   revoked: boolean
 }
 
@@ -45,15 +48,18 @@ export default function VerifyPage() {
         return
       }
 
-      const data = accountInfo.data
-      const issuerBytes = data.slice(8, 40)
-      const { PublicKey } = await import("@solana/web3.js")
-      const issuer = new PublicKey(issuerBytes).toBase58()
-      const revoked = data[72] === 1
+      const decoded = decodeCredentialAccount(accountInfo.data)
 
-      setCredential({ issuer, hash: hexHash, revoked })
+      setCredential({
+        issuer: decoded.issuer,
+        recipient: decoded.recipient,
+        hash: hexHash,
+        issuedAt: decoded.issuedAt,
+        credentialType: decoded.credentialType,
+        revoked: decoded.revoked,
+      })
       setVerifiedHash(hexHash)
-      setStatus(revoked ? "revoked" : "valid")
+      setStatus(decoded.revoked ? "revoked" : "valid")
     } catch (err: any) {
       console.error("Verification error:", err)
       setError(err?.message || "Verification failed.")
@@ -106,8 +112,19 @@ export default function VerifyPage() {
             <p className="result-desc">
               This credential hash exists on the blockchain and has not been revoked.
             </p>
+            {credential && (
+              <div className="credential-meta-row">
+                <span className={`type-badge type-${credential.credentialType}`}>
+                  {credentialTypeLabel(credential.credentialType)}
+                </span>
+                <span className="meta-date">
+                  Issued {new Date(credential.issuedAt * 1000).toLocaleDateString()}
+                </span>
+              </div>
+            )}
             <HashDisplay label="Verified Hash" hash={verifiedHash} />
             {credential && <HashDisplay label="Issuer" hash={credential.issuer} />}
+            {credential && <HashDisplay label="Recipient" hash={credential.recipient} />}
           </div>
         )
       case "revoked":
@@ -118,8 +135,19 @@ export default function VerifyPage() {
             <p className="result-desc">
               The issuer has actively invalidated this document hash on-chain.
             </p>
+            {credential && (
+              <div className="credential-meta-row">
+                <span className={`type-badge type-${credential.credentialType}`}>
+                  {credentialTypeLabel(credential.credentialType)}
+                </span>
+                <span className="meta-date">
+                  Issued {new Date(credential.issuedAt * 1000).toLocaleDateString()}
+                </span>
+              </div>
+            )}
             <HashDisplay label="Revoked Hash" hash={verifiedHash} />
             {credential && <HashDisplay label="Issuer" hash={credential.issuer} />}
+            {credential && <HashDisplay label="Recipient" hash={credential.recipient} />}
           </div>
         )
       case "not_found":
