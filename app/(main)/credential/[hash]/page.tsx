@@ -162,14 +162,23 @@ export default function CredentialDetailPage() {
     ? `${window.location.origin}/credential/${hash}`
     : ""
 
+  // ── Badge color map ──
+  const typeBadgeClasses: Record<number, string> = {
+    0: "bg-[rgba(20,241,149,0.15)] text-[#14F195] border-[rgba(20,241,149,0.25)]",
+    1: "bg-[rgba(153,69,255,0.15)] text-[#9945FF] border-[rgba(153,69,255,0.25)]",
+    2: "bg-[rgba(59,130,246,0.12)] text-blue-500 border-[rgba(59,130,246,0.25)]",
+    3: "bg-[rgba(245,158,11,0.12)] text-amber-500 border-[rgba(245,158,11,0.25)]",
+    4: "bg-[rgba(255,255,255,0.04)] text-[var(--text-muted)] border-[var(--border-color)]",
+  }
+
   // ── Loading / Not Found ──
   if (loading) {
     return (
-      <div className="inner-page">
-        <div className="inner-page-container" style={{ textAlign: "center" }}>
-          <div className="result-icon neutral" style={{ margin: "0 auto" }}>⏳</div>
-          <h1 className="page-title" style={{ marginTop: "2rem" }}>Loading...</h1>
-          <p className="page-subtitle" style={{ margin: "0 auto" }}>Fetching credential from Solana devnet</p>
+      <div className="flex flex-col items-center py-8 pb-16">
+        <div className="w-full max-w-[720px] flex flex-col gap-7 text-center">
+          <div className="w-16 h-16 rounded-lg border border-[var(--border-color)] flex items-center justify-center text-2xl text-[var(--text-muted)] mx-auto">⏳</div>
+          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-bold tracking-[-0.04em] mt-8">Loading...</h1>
+          <p className="text-base text-[var(--text-muted)] max-w-[500px] leading-relaxed mx-auto">Fetching credential from Solana devnet</p>
         </div>
       </div>
     )
@@ -177,41 +186,49 @@ export default function CredentialDetailPage() {
 
   if (notFound) {
     return (
-      <div className="inner-page">
-        <div className="inner-page-container" style={{ textAlign: "center" }}>
-          <div className="result-icon neutral" style={{ margin: "0 auto" }}>?</div>
-          <h1 className="page-title" style={{ marginTop: "2rem" }}>Not Found</h1>
-          <p className="page-subtitle" style={{ margin: "0 auto" }}>No credential with this hash was found on-chain.</p>
-          <Link href="/verify" className="btn-pill" style={{ marginTop: "2rem" }}>Go to Verify</Link>
+      <div className="flex flex-col items-center py-8 pb-16">
+        <div className="w-full max-w-[720px] flex flex-col gap-7 text-center">
+          <div className="w-16 h-16 rounded-lg border border-[var(--border-color)] flex items-center justify-center text-2xl text-[var(--text-muted)] mx-auto">?</div>
+          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-bold tracking-[-0.04em] mt-8">Not Found</h1>
+          <p className="text-base text-[var(--text-muted)] max-w-[500px] leading-relaxed mx-auto">No credential with this hash was found on-chain.</p>
+          <Link href="/verify" className="inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-sm font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)] mt-8">Go to Verify</Link>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="inner-page">
-      <div className="inner-page-container">
+    <div className="flex flex-col items-center py-8 pb-16">
+      <div className="w-full max-w-[720px] flex flex-col gap-7">
         {/* Status banner */}
-        <div className="credential-status-banner" data-status={credential?.revoked ? "revoked" : "valid"}>
-          <span className="credential-status-icon">{credential?.revoked ? "✕" : "✓"}</span>
-          <span className="credential-status-text">
+        <div className={`flex items-center gap-3 py-3.5 px-5 border rounded-lg ${
+          credential?.revoked
+            ? "border-[rgba(239,68,68,0.25)] bg-[var(--error-bg)]"
+            : "border-[rgba(20,241,149,0.25)] bg-[rgba(20,241,149,0.15)]"
+        }`}>
+          <span className={`w-7 h-7 rounded-md border flex items-center justify-center text-sm shrink-0 ${
+            credential?.revoked
+              ? "border-[rgba(239,68,68,0.4)] text-[var(--error)] bg-[var(--error-bg)]"
+              : "border-[rgba(20,241,149,0.4)] text-[#14F195] bg-[rgba(20,241,149,0.15)]"
+          }`}>{credential?.revoked ? "✕" : "✓"}</span>
+          <span className="text-sm font-medium">
             {credential?.revoked ? "This credential has been revoked" : "Credential verified on Solana"}
           </span>
         </div>
 
         <div>
           <span className="label">Credential Detail</span>
-          <h1 className="page-title">On-Chain Record</h1>
+          <h1 className="text-[clamp(2rem,4vw,3rem)] leading-[1.1] font-bold tracking-[-0.04em] mb-2">On-Chain Record</h1>
         </div>
 
         {/* ── On-chain data ── */}
-        <div className="card-panel" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div className="border border-[var(--border-color)] rounded-lg p-8 bg-[var(--bg-card)] transition-colors duration-150 hover:border-[var(--border-hover)] flex flex-col gap-6">
           {credential && (
-            <div className="credential-meta-row" style={{ justifyContent: "space-between" }}>
-              <span className={`type-badge type-${credential.credentialType}`}>
+            <div className="flex items-center gap-4 flex-wrap justify-between">
+              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-[0.65rem] font-semibold tracking-wide font-mono border ${typeBadgeClasses[credential.credentialType] || typeBadgeClasses[4]}`}>
                 {credentialTypeLabel(credential.credentialType)}
               </span>
-              <span className="meta-date">
+              <span className="text-[0.7rem] text-[var(--text-muted)] font-mono">
                 Issued {new Date(credential.issuedAt * 1000).toLocaleString()}
               </span>
             </div>
@@ -222,69 +239,69 @@ export default function CredentialDetailPage() {
           <HashDisplay label="Recipient Public Key" hash={credential?.recipient || ""} />
           <HashDisplay label="PDA Account" hash={credential?.pda || ""} />
 
-          <div className="hash-block">
-            <span className="hash-label">Status</span>
-            <div style={{ padding: "1rem", border: "1px solid var(--border-color)", borderRadius: "4px", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span className={`status-dot ${credential?.revoked ? "error" : "success"}`} />
-              <span style={{ fontSize: "0.9rem" }}>{credential?.revoked ? "Revoked" : "Active & Verified"}</span>
+          <div className="w-full flex flex-col gap-2">
+            <span className="text-[0.65rem] uppercase tracking-[0.08em] text-[var(--text-muted)] font-semibold font-mono">Status</span>
+            <div className="p-4 border border-[var(--border-color)] rounded flex items-center gap-3">
+              <span className={`w-1.5 h-1.5 rounded-full inline-block ${credential?.revoked ? "bg-[var(--error)]" : "bg-[#14F195]"}`} />
+              <span className="text-sm">{credential?.revoked ? "Revoked" : "Active & Verified"}</span>
             </div>
           </div>
         </div>
 
         {/* ── Off-chain Metadata ── */}
-        <div className="card-panel" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span className="label" style={{ margin: 0 }}>Off-Chain Metadata</span>
-            <button className="link-small" onClick={() => setEditingMeta(!editingMeta)} style={{ fontSize: "0.65rem" }}>
+        <div className="border border-[var(--border-color)] rounded-lg p-8 bg-[var(--bg-card)] transition-colors duration-150 hover:border-[var(--border-hover)] flex flex-col gap-6">
+          <div className="flex justify-between items-center">
+            <span className="label !m-0">Off-Chain Metadata</span>
+            <button className="text-[0.65rem] font-medium text-[#14F195] hover:text-[var(--accent-hover)] transition-all duration-150 inline-flex items-center gap-1.5" onClick={() => setEditingMeta(!editingMeta)}>
               {editingMeta ? "Cancel" : metadata ? "Edit" : "Add Metadata"}
             </button>
           </div>
 
           {editingMeta ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div className="form-group">
-                <label className="form-label" style={{ fontSize: "0.65rem" }}>Student / Recipient Name</label>
-                <input type="text" className="input-field" placeholder="e.g. John Doe" value={metaStudentName} onChange={(e) => setMetaStudentName(e.target.value)} />
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[0.65rem] font-semibold text-[var(--text-primary)] flex items-center gap-3">Student / Recipient Name</label>
+                <input type="text" className="w-full bg-transparent border border-[var(--border-color)] rounded-lg px-4 py-3 font-mono text-sm text-[var(--text-primary)] transition-colors duration-150 outline-none placeholder:text-[var(--text-dim)] focus:border-[#14F195] focus:shadow-[0_0_0_2px_rgba(20,241,149,0.15)]" placeholder="e.g. John Doe" value={metaStudentName} onChange={(e) => setMetaStudentName(e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label" style={{ fontSize: "0.65rem" }}>Institution</label>
-                <input type="text" className="input-field" placeholder="e.g. MIT" value={metaInstitution} onChange={(e) => setMetaInstitution(e.target.value)} />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[0.65rem] font-semibold text-[var(--text-primary)] flex items-center gap-3">Institution</label>
+                <input type="text" className="w-full bg-transparent border border-[var(--border-color)] rounded-lg px-4 py-3 font-mono text-sm text-[var(--text-primary)] transition-colors duration-150 outline-none placeholder:text-[var(--text-dim)] focus:border-[#14F195] focus:shadow-[0_0_0_2px_rgba(20,241,149,0.15)]" placeholder="e.g. MIT" value={metaInstitution} onChange={(e) => setMetaInstitution(e.target.value)} />
               </div>
-              <div className="form-group">
-                <label className="form-label" style={{ fontSize: "0.65rem" }}>Credential Title</label>
-                <input type="text" className="input-field" placeholder="e.g. Bachelor of Computer Science" value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[0.65rem] font-semibold text-[var(--text-primary)] flex items-center gap-3">Credential Title</label>
+                <input type="text" className="w-full bg-transparent border border-[var(--border-color)] rounded-lg px-4 py-3 font-mono text-sm text-[var(--text-primary)] transition-colors duration-150 outline-none placeholder:text-[var(--text-dim)] focus:border-[#14F195] focus:shadow-[0_0_0_2px_rgba(20,241,149,0.15)]" placeholder="e.g. Bachelor of Computer Science" value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} />
               </div>
-              <button className="btn-pill" style={{ width: "100%" }} onClick={handleSaveMetadata}>Save Metadata</button>
+              <button className="w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-sm font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)]" onClick={handleSaveMetadata}>Save Metadata</button>
             </div>
           ) : metadata && (metadata.studentName || metadata.institution || metadata.title) ? (
-            <div className="metadata-display">
+            <div className="flex flex-col gap-2">
               {metadata.title && (
-                <div className="metadata-field">
-                  <span className="metadata-field-label">Title</span>
-                  <span className="metadata-field-value">{metadata.title}</span>
+                <div className="flex flex-col gap-0.5 p-3 px-4 border border-[var(--border-color)] rounded-lg transition-colors duration-150 hover:border-[var(--border-hover)]">
+                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] font-mono">Title</span>
+                  <span className="text-[0.95rem] font-medium text-[var(--text-primary)]">{metadata.title}</span>
                 </div>
               )}
               {metadata.studentName && (
-                <div className="metadata-field">
-                  <span className="metadata-field-label">Student</span>
-                  <span className="metadata-field-value">{metadata.studentName}</span>
+                <div className="flex flex-col gap-0.5 p-3 px-4 border border-[var(--border-color)] rounded-lg transition-colors duration-150 hover:border-[var(--border-hover)]">
+                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] font-mono">Student</span>
+                  <span className="text-[0.95rem] font-medium text-[var(--text-primary)]">{metadata.studentName}</span>
                 </div>
               )}
               {metadata.institution && (
-                <div className="metadata-field">
-                  <span className="metadata-field-label">Institution</span>
-                  <span className="metadata-field-value">{metadata.institution}</span>
+                <div className="flex flex-col gap-0.5 p-3 px-4 border border-[var(--border-color)] rounded-lg transition-colors duration-150 hover:border-[var(--border-hover)]">
+                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] font-mono">Institution</span>
+                  <span className="text-[0.95rem] font-medium text-[var(--text-primary)]">{metadata.institution}</span>
                 </div>
               )}
               {metadata.ipfsCid && (
-                <div className="metadata-field">
-                  <span className="metadata-field-label">IPFS CID</span>
-                  <span className="metadata-field-value" style={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
+                <div className="flex flex-col gap-0.5 p-3 px-4 border border-[var(--border-color)] rounded-lg transition-colors duration-150 hover:border-[var(--border-hover)]">
+                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.08em] text-[var(--text-muted)] font-mono">IPFS CID</span>
+                  <span className="text-[0.95rem] font-medium text-[var(--text-primary)] font-mono text-xs">
                     <a
                       href={`https://gateway.pinata.cloud/ipfs/${metadata.ipfsCid}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ color: "#14F195", textDecoration: "none" }}
+                      className="text-[#14F195] no-underline"
                     >
                       {metadata.ipfsCid} ↗
                     </a>
@@ -293,56 +310,46 @@ export default function CredentialDetailPage() {
               )}
             </div>
           ) : (
-            <p style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+            <p className="text-sm text-[var(--text-muted)]">
               No off-chain metadata stored. Click &quot;Add Metadata&quot; to attach student name, institution, and title.
             </p>
           )}
 
           {/* IPFS Pinning */}
           {metadata && (metadata.studentName || metadata.institution || metadata.title) && !metadata.ipfsCid && (
-            <div style={{ borderTop: "1px solid var(--border-color)", paddingTop: "1rem" }}>
+            <div className="border-t border-[var(--border-color)] pt-4">
               {!showIpfsConfig ? (
-                <div style={{ display: "flex", gap: "0.75rem" }}>
-                  <button className="link-small" onClick={() => setShowIpfsConfig(true)} style={{ fontSize: "0.65rem" }}>
+                <div className="flex gap-3">
+                  <button className="text-[0.65rem] font-medium text-[#14F195] hover:text-[var(--accent-hover)] transition-all duration-150 inline-flex items-center gap-1.5" onClick={() => setShowIpfsConfig(true)}>
                     Pin to IPFS
                   </button>
-                  <button className="link-small" onClick={() => setShowMetadataJson(!showMetadataJson)} style={{ fontSize: "0.65rem" }}>
+                  <button className="text-[0.65rem] font-medium text-[#14F195] hover:text-[var(--accent-hover)] transition-all duration-150 inline-flex items-center gap-1.5" onClick={() => setShowMetadataJson(!showMetadataJson)}>
                     {showMetadataJson ? "Hide JSON" : "View JSON"}
                   </button>
                 </div>
               ) : (
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  <label className="form-label" style={{ fontSize: "0.65rem" }}>
+                <div className="flex flex-col gap-3">
+                  <label className="text-[0.65rem] font-semibold text-[var(--text-primary)] flex items-center gap-3">
                     Pinata JWT
-                    <span className="form-hint">Free at pinata.cloud — stored locally</span>
+                    <span className="text-[0.7rem] font-normal text-[var(--text-muted)] normal-case tracking-normal">Free at pinata.cloud — stored locally</span>
                   </label>
                   <input
                     type="password"
-                    className="input-field"
+                    className="w-full bg-transparent border border-[var(--border-color)] rounded-lg px-4 py-3 font-mono text-sm text-[var(--text-primary)] transition-colors duration-150 outline-none placeholder:text-[var(--text-dim)] focus:border-[#14F195] focus:shadow-[0_0_0_2px_rgba(20,241,149,0.15)]"
                     placeholder="eyJhbGciOi..."
                     value={pinataJwt}
                     onChange={(e) => setPinataJwtLocal(e.target.value)}
                   />
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    <button className="btn-pill" style={{ flex: 1, fontSize: "0.75rem" }} onClick={handlePinToIpfs} disabled={pinning}>
+                  <div className="flex gap-2">
+                    <button className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-xs font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)]" onClick={handlePinToIpfs} disabled={pinning}>
                       {pinning ? "Pinning..." : "Pin to IPFS"}
                     </button>
-                    <button className="link-small" onClick={() => setShowIpfsConfig(false)} style={{ fontSize: "0.65rem" }}>Cancel</button>
+                    <button className="text-[0.65rem] font-medium text-[#14F195] hover:text-[var(--accent-hover)] transition-all duration-150 inline-flex items-center gap-1.5" onClick={() => setShowIpfsConfig(false)}>Cancel</button>
                   </div>
                 </div>
               )}
               {showMetadataJson && (
-                <pre style={{
-                  marginTop: "0.75rem",
-                  padding: "1rem",
-                  border: "1px solid var(--border-color)",
-                  borderRadius: "4px",
-                  fontSize: "0.7rem",
-                  fontFamily: "monospace",
-                  color: "var(--text-muted)",
-                  overflow: "auto",
-                  whiteSpace: "pre-wrap",
-                }}>
+                <pre className="mt-3 p-4 border border-[var(--border-color)] rounded text-[0.7rem] font-mono text-[var(--text-muted)] overflow-auto whitespace-pre-wrap">
                   {buildMetadataJSON(hash, metadata)}
                 </pre>
               )}
@@ -351,13 +358,13 @@ export default function CredentialDetailPage() {
         </div>
 
         {/* ── Share & QR ── */}
-        <div className="card-panel" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2rem" }}>
-          <span className="label" style={{ textAlign: "center" }}>Share & Verify</span>
-          <p style={{ fontSize: "0.9rem", color: "var(--text-muted)", textAlign: "center", maxWidth: 400 }}>
+        <div className="border border-[var(--border-color)] rounded-lg p-8 bg-[var(--bg-card)] transition-colors duration-150 hover:border-[var(--border-hover)] flex flex-col items-center gap-8">
+          <span className="label text-center">Share & Verify</span>
+          <p className="text-sm text-[var(--text-muted)] text-center max-w-[400px]">
             Share this QR code or link for anyone to independently verify this credential on-chain.
           </p>
 
-          <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", display: "inline-flex" }}>
+          <div className="bg-white p-6 rounded-lg inline-flex">
             <QRCodeSVG value={shareUrl} size={200} level="M" bgColor="#ffffff" fgColor="#111111" />
           </div>
 
@@ -365,17 +372,16 @@ export default function CredentialDetailPage() {
 
           {/* ── Download Certificate PDF ── */}
           <button
-            className="btn-pill"
-            style={{ width: "100%", opacity: generatingPdf ? 0.5 : 1 }}
+            className={`w-full inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-sm font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)] ${generatingPdf ? "opacity-50" : ""}`}
             onClick={handleDownloadPDF}
             disabled={generatingPdf}
           >
             {generatingPdf ? "Generating PDF..." : "Download Certificate PDF"}
           </button>
 
-          <div style={{ display: "flex", gap: "1rem", width: "100%" }}>
-            <Link href="/verify" className="btn-pill" style={{ flex: 1, textAlign: "center" }}>Verify Another</Link>
-            <Link href="/dashboard" className="btn-pill" style={{ flex: 1, textAlign: "center" }}>Dashboard</Link>
+          <div className="flex gap-4 w-full">
+            <Link href="/verify" className="flex-1 text-center inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-sm font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)]">Verify Another</Link>
+            <Link href="/dashboard" className="flex-1 text-center inline-flex items-center justify-center gap-2 px-6 py-2.5 border border-[var(--border-color)] rounded-lg bg-transparent text-[var(--text-primary)] text-sm font-medium transition-all duration-150 hover:bg-[var(--bg-elevated)] hover:border-[var(--border-hover)]">Dashboard</Link>
           </div>
         </div>
       </div>
