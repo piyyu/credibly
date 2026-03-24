@@ -1,7 +1,7 @@
 # Credibly — Decentralized Academic Credential Verification System
 ### Built with Next.js 14 + Solana
 
-> **Author:** Piyush Kumar | **Stack:** Next.js 14 (App Router) · Solana · Anchor · IPFS · SSI · ZK Proofs
+> **Author:** piyyu | **Stack:** Next.js 14 (App Router) · Solana · Anchor · IPFS · SSI · ZK Proofs
 
 Credibly is a blockchain-powered platform that eliminates fake academic credentials and replaces slow, costly verification with instant, cryptographically secure checks. This edition replaces Ethereum/Hyperledger with **Solana** for high-throughput, low-cost on-chain operations and uses **Next.js 14 App Router** as the unified full-stack framework.
 
@@ -57,15 +57,15 @@ Solana's near-zero fees make per-credential on-chain anchoring economically viab
 │                     CREDIBLY (Next.js 14)                          │
 │                                                                    │
 │  /app                                                              │
-│  ├── (institution)/dashboard   → Bulk issuance, revocation, logs  │
-│  ├── (student)/wallet          → SSI wallet, QR sharing           │
-│  ├── (verifier)/verify         → Public credential checker        │
+│  ├── (institution)/dashboard   → Bulk issuance, revocation, logs   │
+│  ├── (student)/wallet          → SSI wallet, QR sharing            │
+│  ├── (verifier)/verify         → Public credential checker         │
 │  └── api/                      → Server Actions & Route Handlers   │
-│       ├── issue/               → Mint VC, write hash to Solana    │
-│       ├── verify/[hash]        → Check on-chain + revocation      │
-│       ├── revoke/              → Update on-chain status           │
-│       ├── digilocker/          → OAuth callback, push VC          │
-│       └── ai/detect            → Anomaly detection proxy          │
+│       ├── issue/               → Mint VC, write hash to Solana     │
+│       ├── verify/[hash]        → Check on-chain + revocation       │
+│       ├── revoke/              → Update on-chain status            │
+│       ├── digilocker/          → OAuth callback, push VC           │
+│       └── ai/detect            → Anomaly detection proxy           │
 └───────────────────────┬────────────────────────────────────────────┘
                         │
          ┌──────────────┼──────────────┐
@@ -214,7 +214,7 @@ npm install -g snarkjs
 
 ## Phase 1 — Monorepo & Environment Setup
 
-- [ ] 1.1 Bootstrap the Next.js project
+- [x] 1.1 Bootstrap the Next.js project
 
 ```bash
 npx create-next-app@latest credibly \
@@ -228,7 +228,7 @@ npx create-next-app@latest credibly \
 cd credibly
 ```
 
-- [ ] 1.2 Install all dependencies
+- [x] 1.2 Install all dependencies
 
 ```bash
 # Solana + Anchor client
@@ -257,14 +257,14 @@ npm install did-resolver @veramo/did-resolver
 npm install -D @types/node crypto-browserify stream-browserify buffer
 ```
 
-- [ ] 1.3 Initialise Anchor workspace
+- [x] 1.3 Initialise Anchor workspace
 
 ```bash
 # In project root
 anchor init anchor --no-git
 ```
 
-- [ ] 1.4 Configure environment
+- [x] 1.4 Configure environment
 
 Create `.env.local` from `.env.local.example`:
 
@@ -292,7 +292,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXTAUTH_SECRET=your_secret
 ```
 
-- [ ] 1.5 Configure Next.js for Solana/Node polyfills
+- [x] 1.5 Configure Next.js for Solana/Node polyfills
 
 `next.config.ts`:
 
