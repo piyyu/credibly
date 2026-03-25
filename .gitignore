@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Solana installation artifacts
+install_solana.sh
+solana-release/
+solana-release-*.tar.bz2
