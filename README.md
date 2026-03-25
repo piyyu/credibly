@@ -710,7 +710,7 @@ describe("credibly", () => {
 
 ## Phase 3 — Off-Chain Storage (IPFS/Arweave)
 
-- [ ] 3.1 Implement IPFS upload, fetch, and VC hashing utilities
+- [x] 3.1 Implement IPFS upload, fetch, and VC hashing utilities
 
 `lib/ipfs/upload.ts`:
 
