@@ -327,7 +327,7 @@ export default nextConfig;
 
 Credibly uses a single Anchor program with three logical modules. Solana PDAs (Program Derived Addresses) replace Ethereum mappings — each credential gets its own account derived deterministically from the credential hash.
 
-- [ ] 2.1 Program entrypoint
+- [x] 2.1 Program entrypoint
 
 `anchor/programs/credibly/src/lib.rs`:
 
@@ -383,7 +383,7 @@ pub mod credibly {
 }
 ```
 
-- [ ] 2.2 Credential module
+- [x] 2.2 Credential module
 
 `anchor/programs/credibly/src/credential.rs`:
 
@@ -491,7 +491,7 @@ pub enum CrediblyError {
 }
 ```
 
-- [ ] 2.3 Revocation module
+- [x] 2.3 Revocation module
 
 `anchor/programs/credibly/src/revocation.rs`:
 
@@ -541,7 +541,7 @@ pub enum RevokeError {
 }
 ```
 
-- [ ] 2.4 Trust Registry module
+- [x] 2.4 Trust Registry module
 
 `anchor/programs/credibly/src/trust.rs`:
 
@@ -592,7 +592,7 @@ pub fn register(ctx: Context<RegisterInstitution>, name: String, tier: u8, did: 
 }
 ```
 
-- [ ] 2.5 Anchor.toml
+- [x] 2.5 Anchor.toml
 
 `anchor/Anchor.toml`:
 
@@ -618,7 +618,7 @@ wallet = "~/.config/solana/id.json"
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
 ```
 
-- [ ] 2.6 Build, deploy, and test
+- [x] 2.6 Build, deploy, and test
 
 ```bash
 cd anchor
@@ -645,7 +645,7 @@ solana airdrop 2
 anchor deploy --provider.cluster devnet
 ```
 
-- [ ] 2.7 Anchor integration test
+- [x] 2.7 Anchor integration test
 
 `anchor/tests/credibly.ts`:
 
