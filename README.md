@@ -761,7 +761,7 @@ export function hashVC(vc: VerifiableCredential): Buffer {
 
 ## Phase 4 — Next.js App Setup
 
-- [ ] 4.1 Root layout with providers
+- [x] 4.1 Root layout with providers
 
 `app/layout.tsx`:
 
@@ -789,7 +789,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- [ ] 4.2 TanStack Query provider
+- [x] 4.2 TanStack Query provider
 
 `components/QueryProvider.tsx`:
 
@@ -804,7 +804,7 @@ export function QueryProvider({ children }: { children: React.ReactNode }) {
 }
 ```
 
-- [ ] 4.3 Landing page
+- [x] 4.3 Landing page
 
 `app/page.tsx`:
 
@@ -838,7 +838,7 @@ export default function Home() {
 
 ## Phase 5 — Solana Wallet Integration
 
-- [ ] 5.1 Wallet Providers component
+- [x] 5.1 Wallet Providers component
 
 `components/wallet/WalletProviders.tsx`:
 
