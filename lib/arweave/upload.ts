@@ -15,9 +15,9 @@ function requireEnv(name: string): string {
 // ---------------------------------------------------------------------------
 // Bundlr / Arweave client
 // ---------------------------------------------------------------------------
-let _bundlr: Bundlr | null = null;
+let _bundlr: any = null;
 
-function getBundlrClient(): Bundlr {
+function getBundlrClient(): any {
   if (_bundlr) return _bundlr;
 
   const privateKey = requireEnv("ARWEAVE_WALLET_KEY");
