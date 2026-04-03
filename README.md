@@ -875,7 +875,7 @@ export function WalletProviders({ children }: { children: React.ReactNode }) {
 }
 ```
 
-- [ ] 5.2 Anchor Program Client
+- [x] 5.2 Anchor Program Client
 
 `lib/solana/client.ts`:
 
@@ -914,7 +914,7 @@ export function getInstitutionPDA(institutionPubkey: web3.PublicKey): [web3.Publ
 }
 ```
 
-- [ ] 5.3 Credential issuance helper
+- [x] 5.3 Credential issuance helper
 
 `lib/solana/credentials.ts`:
 
@@ -971,7 +971,7 @@ export async function verifyCredentialOnChain(
 
 ## Phase 6 — Institution Admin Dashboard
 
-- [ ] 6.1 Dashboard layout
+- [x] 6.1 Dashboard layout
 
 `app/(institution)/dashboard/layout.tsx`:
 
@@ -1003,7 +1003,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 }
 ```
 
-- [ ] 6.2 Bulk Issuance page
+- [x] 6.2 Bulk Issuance page
 
 `app/(institution)/dashboard/issue/page.tsx`:
 
@@ -1101,7 +1101,7 @@ export default function IssuePage() {
 }
 ```
 
-- [ ] 6.3 Audit Logs page
+- [x] 6.3 Audit Logs page
 
 `app/(institution)/dashboard/logs/page.tsx`:
 
@@ -1142,7 +1142,7 @@ export default function LogsPage() {
 }
 ```
 
-- [ ] 6.4 Revoke page
+- [x] 6.4 Revoke page
 
 `app/(institution)/dashboard/revoke/page.tsx`:
 

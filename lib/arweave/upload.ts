@@ -15,8 +15,10 @@ function requireEnv(name: string): string {
 // ---------------------------------------------------------------------------
 // Bundlr / Arweave client
 // ---------------------------------------------------------------------------
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let _bundlr: any = null;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getBundlrClient(): any {
   if (_bundlr) return _bundlr;
 
