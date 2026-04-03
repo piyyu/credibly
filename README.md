@@ -1199,7 +1199,7 @@ export default function RevokePage() {
 
 ## Phase 7 — Student SSI Wallet (Web)
 
-- [ ] 7.1 Build student wallet credentials page
+- [x] 7.1 Build student wallet credentials page
 
 `app/(student)/wallet/page.tsx`:
 
@@ -1270,7 +1270,7 @@ export default function WalletPage() {
 }
 ```
 
-- [ ] 7.2 QR sharing page
+- [x] 7.2 QR sharing page
 
 `app/(student)/wallet/share/[id]/page.tsx`:
 
@@ -1303,7 +1303,7 @@ export default function SharePage({ params }: { params: { id: string } }) {
 
 ## Phase 8 — Verifier Portal & API Routes
 
-- [ ] 8.1 Verifier input page
+- [x] 8.1 Verifier input page
 
 `app/(verifier)/verify/page.tsx`:
 
@@ -1334,7 +1334,7 @@ export default function VerifyPage() {
 }
 ```
 
-- [ ] 8.2 Verification result page
+- [x] 8.2 Verification result page
 
 `app/(verifier)/verify/[hash]/page.tsx`:
 
@@ -1395,7 +1395,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 ```
 
-- [ ] 8.3 Verify API route
+- [x] 8.3 Verify API route
 
 `app/api/verify/[hash]/route.ts`:
 
@@ -1436,7 +1436,7 @@ export async function GET(_req: NextRequest, { params }: { params: { hash: strin
 }
 ```
 
-- [ ] 8.4 Issue API route
+- [x] 8.4 Issue API route
 
 `app/api/issue/route.ts`:
 
