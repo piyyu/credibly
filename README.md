@@ -1458,9 +1458,9 @@ export async function POST(req: NextRequest) {
 
 ## Phase 9 — DigiLocker & NAD Integration
 
-- [ ] 9.1 Build DigiLocker client helpers
-- [ ] 9.2 Add DigiLocker auth route
-- [ ] 9.3 Add DigiLocker callback route
+- [x] 9.1 Build DigiLocker client helpers
+- [x] 9.2 Add DigiLocker auth route
+- [x] 9.3 Add DigiLocker callback route
 
 `lib/digilocker/client.ts`:
 
@@ -1534,7 +1534,7 @@ export async function GET(req: NextRequest) {
 
 ## Phase 10 — AI Anomaly Detection
 
-- [ ] 10.1 FastAPI service
+- [x] 10.1 FastAPI service
 
 `ai/main.py`:
 
@@ -1601,7 +1601,7 @@ python train.py           # train the model first
 uvicorn main:app --reload --port 8000
 ```
 
-- [ ] 10.2 AI proxy API route
+- [x] 10.2 AI proxy API route
 
 `app/api/ai/detect/route.ts`:
 

@@ -45,3 +45,11 @@ next-env.d.ts
 install_solana.sh
 solana-release/
 solana-release-*.tar.bz2
+
+# Python / AI
+/ai/venv/
+__pycache__/
+*.pkl
+
+# Local Solana Ledger
+/test-ledger/
