@@ -2,54 +2,51 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Search, Shield, QrCode } from "lucide-react";
+import { Search, Shield, ArrowRight } from "lucide-react";
 
 export default function VerifyPage() {
   const [hash, setHash] = useState("");
   const router = useRouter();
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 relative min-h-screen overflow-hidden">
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-emerald-500/10 blur-[150px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[500px] h-[500px] bg-blue-500/10 blur-[150px] rounded-full pointer-events-none" />
-
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
+    <div className="flex-1 flex flex-col items-center justify-center p-6 min-h-[80vh]">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-2xl text-center relative z-10"
+        className="w-full max-w-xl text-center"
       >
-        <div className="mx-auto w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center mb-8 shadow-2xl">
-          <Shield className="w-8 h-8 text-emerald-400" />
+        <div className="mx-auto w-14 h-14 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+          <Shield className="w-7 h-7 text-emerald-600" />
         </div>
-        
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Verify a Credential</h1>
-        <p className="text-gray-400 text-lg mb-12 max-w-lg mx-auto leading-relaxed">
-          Instantly verify the cryptographic authenticity of any document issued on the Credibly network.
+
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3 tracking-tight">Verify a Credential</h1>
+        <p className="text-gray-500 text-base mb-10 max-w-md mx-auto leading-relaxed">
+          Instantly verify the authenticity of any credential issued on the Credibly network.
         </p>
 
-        <div className="glass-panel p-2 rounded-2xl flex flex-col md:flex-row gap-3 glow-effect relative">
+        <div className="card p-2 flex flex-col sm:flex-row gap-2">
           <div className="relative flex-1 flex items-center">
-            <Search className="w-5 h-5 text-gray-500 absolute left-4" />
-            <input 
-              type="text" 
+            <Search className="w-4 h-4 text-gray-400 absolute left-3.5" />
+            <input
+              type="text"
               placeholder="Paste credential hash (hex)..."
-              value={hash} 
+              value={hash}
               onChange={(e) => setHash(e.target.value)}
-              className="w-full bg-black/40 border border-transparent rounded-xl py-4 pl-12 pr-4 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-all placeholder:text-gray-600" 
+              className="w-full bg-gray-50 border border-gray-100 rounded-lg py-3 pl-10 pr-4 text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300 transition-all placeholder:text-gray-400"
             />
           </div>
-          <button 
-            onClick={() => router.push(`/verify/${hash}`)} 
+          <button
+            onClick={() => router.push(`/verify/${hash}`)}
             disabled={!hash}
-            className="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+            className="px-6 py-3 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 text-sm"
           >
-            Verify <QrCode className="w-4 h-4 hidden md:block" />
+            Verify <ArrowRight className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500 font-medium">
-          <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500/50"></span> Cryptographically secure</span>
-          <span className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-blue-500/50"></span> Instant validation</span>
+        <div className="mt-8 flex items-center justify-center gap-6 text-xs text-gray-400 font-medium">
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400" /> Cryptographically secure</span>
+          <span className="flex items-center gap-1.5"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Instant validation</span>
         </div>
       </motion.div>
     </div>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useCrediblyProgram, getCredentialPDA } from "@/lib/solana/client";
 import { motion } from "framer-motion";
-import { ShieldAlert } from "lucide-react";
+import { ShieldAlert, AlertTriangle } from "lucide-react";
 
 export default function RevokePage() {
   const { publicKey } = useWallet();
@@ -39,44 +39,63 @@ export default function RevokePage() {
 
   return (
     <div className="p-8 max-w-3xl mx-auto w-full">
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight mb-2 text-red-400">Revoke Credential</h1>
-        <p className="text-gray-400">Irreversibly invalidate a credential globally across the verification network.</p>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Revoke Credential</h1>
+        <p className="text-sm text-gray-500">Permanently invalidate a credential across the network.</p>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <div className="glass-panel p-8 md:p-10 rounded-3xl border border-red-500/20 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/10 blur-[80px] rounded-full pointer-events-none" />
-          
-          <div className="space-y-6 relative z-10">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Cryptographic Hash</label>
-              <input type="text" placeholder="Enter hex hash associated with credential..."
-                value={hashHex} onChange={(e) => setHashHex(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all font-mono text-sm" />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">Reason for Revocation</label>
-              <input type="text" placeholder="e.g. Academic misconduct, Error in issuance"
-                value={reason} onChange={(e) => setReason(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-4 text-white focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all" />
-            </div>
-            
-            <button onClick={handleRevoke} disabled={!hashHex || !publicKey || processing}
-              className="w-full py-4 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl disabled:opacity-50 transition-colors mt-4 flex justify-center items-center gap-2">
-              {processing ? "Broadcasting to Solana..." : <><ShieldAlert className="w-5 h-5" /> Permanently Revoke</>}
-            </button>
-            
-            {status && (
-              <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} 
-                className={`text-sm font-mono p-4 rounded-lg mt-4 break-all border ${isError ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'}`}>
-                {status}
-              </motion.p>
-            )}
-          </div>
+      <div className="card p-8 border-red-100">
+        <div className="flex items-center gap-3 mb-6 p-3 bg-red-50 border border-red-100 rounded-xl">
+          <AlertTriangle className="w-4 h-4 text-red-500 shrink-0" />
+          <p className="text-sm text-red-700">This action is irreversible. The credential will be permanently marked as revoked on Solana.</p>
         </div>
-      </motion.div>
+
+        <div className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Credential Hash</label>
+            <input
+              type="text"
+              placeholder="Enter hex hash..."
+              value={hashHex}
+              onChange={(e) => setHashHex(e.target.value)}
+              className="input-clean font-mono text-sm"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1.5">Reason</label>
+            <input
+              type="text"
+              placeholder="e.g. Academic misconduct, Error in issuance"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              className="input-clean"
+            />
+          </div>
+
+          <button
+            onClick={handleRevoke}
+            disabled={!hashHex || !publicKey || processing}
+            className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-xl disabled:opacity-50 transition-colors flex justify-center items-center gap-2 text-sm"
+          >
+            {processing ? "Broadcasting..." : <><ShieldAlert className="w-4 h-4" /> Permanently Revoke</>}
+          </button>
+
+          {status && (
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`text-sm p-4 rounded-xl break-all border ${
+                isError
+                  ? "bg-red-50 text-red-700 border-red-200"
+                  : "bg-emerald-50 text-emerald-700 border-emerald-200"
+              }`}
+            >
+              {status}
+            </motion.div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

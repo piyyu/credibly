@@ -57,68 +57,73 @@ export default function IssuePage() {
   }
 
   if (!publicKey) return (
-    <div className="flex-1 flex flex-col items-center justify-center pt-32">
-      <div className="glass-panel p-10 rounded-3xl text-center max-w-md">
-        <h2 className="text-2xl font-bold mb-3">Institution Wallet Required</h2>
-        <p className="text-gray-400 mb-6">You must connect an authorized issuing wallet to perform cryptographic document signing.</p>
-        <div className="flex justify-center"><WalletMultiButton className="!bg-emerald-500 !text-black !font-bold hover:!bg-emerald-400" /></div>
+    <div className="flex-1 flex flex-col items-center justify-center p-8">
+      <div className="card p-10 text-center max-w-md">
+        <div className="w-14 h-14 bg-amber-50 rounded-2xl mx-auto mb-5 flex items-center justify-center">
+          <UploadCloud className="w-7 h-7 text-amber-600" />
+        </div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-2">Connect Wallet</h2>
+        <p className="text-sm text-gray-500 mb-6">Connect your institution's Solana wallet to begin issuing credentials.</p>
+        <div className="flex justify-center">
+          <WalletMultiButton className="!bg-gray-900 !text-white !font-medium hover:!bg-gray-800 !rounded-xl" />
+        </div>
       </div>
     </div>
   );
 
   return (
     <div className="p-8 max-w-4xl mx-auto w-full">
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">Bulk Issuance</h1>
-        <p className="text-gray-400">Anchor thousands of records simultaneously to Solana for permanent verification.</p>
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Bulk Issuance</h1>
+        <p className="text-sm text-gray-500">Upload a CSV to anchor credentials to Solana.</p>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-        <label className="block border-2 border-dashed border-white/20 hover:border-emerald-500/50 hover:bg-emerald-500/5 bg-black/40 backdrop-blur-md rounded-3xl p-12 text-center cursor-pointer transition-all group relative overflow-hidden">
-          {processing && (
-            <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-10">
-              <Loader2 className="w-10 h-10 text-emerald-500 animate-spin mb-3" />
-              <p className="text-emerald-400 font-medium">Signing and Anchoring to Solana...</p>
-            </div>
-          )}
-          
-          <div className="w-16 h-16 bg-white/5 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
-            <UploadCloud className="w-8 h-8 text-gray-400 group-hover:text-emerald-400 transition-colors" />
+      <label className="block card p-10 text-center cursor-pointer hover:border-emerald-200 hover:bg-emerald-50/30 transition-all group relative overflow-hidden">
+        {processing && (
+          <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10 rounded-2xl">
+            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mb-3" />
+            <p className="text-sm font-medium text-gray-700">Signing & anchoring to Solana...</p>
           </div>
-          <h3 className="text-xl font-semibold mb-2">Upload CSV Registry</h3>
-          <p className="text-gray-400 text-sm max-w-sm mx-auto mb-6">
-            Required columns: <code className="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">student_did</code>, <code className="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">degree</code>, <code className="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">institution</code>, <code className="text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded">graduation_year</code>
-          </p>
-          <div className="inline-flex glass-pill px-4 py-2 text-sm text-white font-medium hover:bg-white/10 transition-colors">
-            Select File
-          </div>
-          <input type="file" accept=".csv" onChange={handleCSVUpload} disabled={processing} className="hidden" />
-        </label>
-      </motion.div>
+        )}
+
+        <div className="w-14 h-14 bg-gray-50 border border-gray-100 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 transition-colors">
+          <UploadCloud className="w-7 h-7 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+        </div>
+        <h3 className="text-base font-semibold text-gray-900 mb-1">Upload CSV Registry</h3>
+        <p className="text-sm text-gray-500 max-w-sm mx-auto mb-5">
+          Columns: <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">student_did</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">degree</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">institution</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">graduation_year</code>
+        </p>
+        <div className="inline-flex px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">
+          Select File
+        </div>
+        <input type="file" accept=".csv" onChange={handleCSVUpload} disabled={processing} className="hidden" />
+      </label>
 
       <AnimatePresence>
         {results.length > 0 && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-12">
-            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
-              Processing Results <span className="text-sm font-normal text-gray-500">({results.length})</span>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
+            <h3 className="text-sm font-semibold text-gray-900 mb-4">
+              Results <span className="text-gray-400 font-normal">({results.length})</span>
             </h3>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {results.map((r, i) => {
                 const isSuccess = r.status.startsWith("Issued");
                 return (
-                  <motion.div 
-                    initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-                    key={i} 
-                    className={`flex items-center justify-between glass-panel rounded-xl p-4 text-sm border-l-4 ${isSuccess ? 'border-l-emerald-500' : 'border-l-red-500'}`}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.03 }}
+                    key={i}
+                    className={`card flex items-center justify-between p-4 text-sm border-l-[3px] ${isSuccess ? "border-l-emerald-500" : "border-l-red-400"}`}
                   >
-                    <div className="flex items-center gap-4 flex-1">
-                      {isSuccess ? <CheckCircle2 className="w-5 h-5 text-emerald-500" /> : <XCircle className="w-5 h-5 text-red-500" />}
-                      <span className="font-mono text-gray-300 truncate max-w-[200px]">{r.did}</span>
-                      <span className={isSuccess ? "text-emerald-400" : "text-red-400"}>{r.status}</span>
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      {isSuccess ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> : <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
+                      <span className="font-mono text-gray-600 truncate text-xs">{r.did}</span>
+                      <span className={`text-xs font-medium ${isSuccess ? "text-emerald-600" : "text-red-500"}`}>{r.status}</span>
                     </div>
                     {r.txSig && (
-                      <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer" 
-                        className="text-xs font-semibold px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-emerald-400 hover:bg-white/10 transition-colors flex items-center gap-1">
+                      <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer"
+                        className="text-xs font-medium text-emerald-600 hover:text-emerald-700 shrink-0 ml-3">
                         View Tx ↗
                       </a>
                     )}
