@@ -58,73 +58,68 @@ export default function IssuePage() {
 
   if (!publicKey) return (
     <div className="flex-1 flex flex-col items-center justify-center p-8">
-      <div className="card p-10 text-center max-w-md">
-        <div className="w-14 h-14 bg-amber-50 rounded-2xl mx-auto mb-5 flex items-center justify-center">
-          <UploadCloud className="w-7 h-7 text-amber-600" />
+      <div className="bg-white rounded-2xl border border-gray-200 p-8 text-center max-w-sm">
+        <div className="w-12 h-12 bg-amber-50 rounded-xl mx-auto mb-4 flex items-center justify-center">
+          <UploadCloud className="w-6 h-6 text-amber-600" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-2">Connect Wallet</h2>
-        <p className="text-sm text-gray-500 mb-6">Connect your institution's Solana wallet to begin issuing credentials.</p>
+        <h2 className="text-lg font-semibold text-gray-900 mb-2">Connect Wallet</h2>
+        <p className="text-sm text-gray-500 mb-5">Connect your institution&apos;s wallet to issue credentials.</p>
         <div className="flex justify-center">
-          <WalletMultiButton className="!bg-gray-900 !text-white !font-medium hover:!bg-gray-800 !rounded-xl" />
+          <WalletMultiButton className="!bg-gray-900 !text-white !font-medium hover:!bg-gray-800 !rounded-lg !text-sm" />
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="p-8 max-w-4xl mx-auto w-full">
-      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Bulk Issuance</h1>
+    <div className="p-6 md:p-8 max-w-3xl mx-auto w-full">
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
+        <h1 className="text-xl font-semibold text-gray-900 mb-1">Bulk Issuance</h1>
         <p className="text-sm text-gray-500">Upload a CSV to anchor credentials to Solana.</p>
       </motion.div>
 
-      <label className="block card p-10 text-center cursor-pointer hover:border-emerald-200 hover:bg-emerald-50/30 transition-all group relative overflow-hidden">
+      <label className="block bg-white rounded-2xl border-2 border-dashed border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/30 p-10 text-center cursor-pointer transition-all group relative overflow-hidden">
         {processing && (
           <div className="absolute inset-0 bg-white/90 flex flex-col items-center justify-center z-10 rounded-2xl">
-            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin mb-3" />
-            <p className="text-sm font-medium text-gray-700">Signing & anchoring to Solana...</p>
+            <Loader2 className="w-7 h-7 text-emerald-600 animate-spin mb-2" />
+            <p className="text-sm font-medium text-gray-700">Anchoring to Solana...</p>
           </div>
         )}
 
-        <div className="w-14 h-14 bg-gray-50 border border-gray-100 rounded-2xl mx-auto mb-4 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 transition-colors">
-          <UploadCloud className="w-7 h-7 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+        <div className="w-12 h-12 bg-gray-50 border border-gray-100 rounded-xl mx-auto mb-3 flex items-center justify-center group-hover:bg-emerald-50 group-hover:border-emerald-100 transition-colors">
+          <UploadCloud className="w-6 h-6 text-gray-400 group-hover:text-emerald-600 transition-colors" />
         </div>
-        <h3 className="text-base font-semibold text-gray-900 mb-1">Upload CSV Registry</h3>
-        <p className="text-sm text-gray-500 max-w-sm mx-auto mb-5">
-          Columns: <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">student_did</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">degree</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">institution</code>, <code className="text-xs bg-gray-100 px-1.5 py-0.5 rounded text-gray-700">graduation_year</code>
+        <h3 className="text-sm font-semibold text-gray-900 mb-1">Upload CSV</h3>
+        <p className="text-xs text-gray-500 mb-4 max-w-xs mx-auto">
+          Columns: <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px]">student_did</code>, <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px]">degree</code>, <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px]">institution</code>, <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px]">graduation_year</code>
         </p>
-        <div className="inline-flex px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors">
-          Select File
-        </div>
+        <span className="inline-flex px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg">Select File</span>
         <input type="file" accept=".csv" onChange={handleCSVUpload} disabled={processing} className="hidden" />
       </label>
 
       <AnimatePresence>
         {results.length > 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-8">
-            <h3 className="text-sm font-semibold text-gray-900 mb-4">
-              Results <span className="text-gray-400 font-normal">({results.length})</span>
-            </h3>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6">
+            <h3 className="text-sm font-semibold text-gray-900 mb-3">Results ({results.length})</h3>
             <div className="space-y-2">
               {results.map((r, i) => {
-                const isSuccess = r.status.startsWith("Issued");
+                const ok = r.status.startsWith("Issued");
                 return (
                   <motion.div
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.03 }}
                     key={i}
-                    className={`card flex items-center justify-between p-4 text-sm border-l-[3px] ${isSuccess ? "border-l-emerald-500" : "border-l-red-400"}`}
+                    className={`bg-white rounded-lg border border-gray-200 flex items-center justify-between p-3 text-sm border-l-[3px] ${ok ? "border-l-emerald-500" : "border-l-red-400"}`}
                   >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      {isSuccess ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> : <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
-                      <span className="font-mono text-gray-600 truncate text-xs">{r.did}</span>
-                      <span className={`text-xs font-medium ${isSuccess ? "text-emerald-600" : "text-red-500"}`}>{r.status}</span>
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      {ok ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> : <XCircle className="w-4 h-4 text-red-500 shrink-0" />}
+                      <span className="font-mono text-gray-500 truncate text-xs">{r.did}</span>
+                      <span className={`text-xs font-medium ${ok ? "text-emerald-600" : "text-red-500"}`}>{r.status}</span>
                     </div>
                     {r.txSig && (
-                      <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer"
-                        className="text-xs font-medium text-emerald-600 hover:text-emerald-700 shrink-0 ml-3">
-                        View Tx ↗
+                      <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer" className="text-xs font-medium text-emerald-600 shrink-0 ml-2">
+                        View ↗
                       </a>
                     )}
                   </motion.div>
