@@ -1623,7 +1623,7 @@ export async function POST(req: NextRequest) {
 
 ## Phase 11 — Zero-Knowledge Proof Layer
 
-- [ ] 11.1 Circuit
+- [x] 11.1 Circuit
 
 `circuits/credentialProof.circom`:
 
@@ -1653,7 +1653,7 @@ template CredentialProof() {
 component main { public [credentialHashLow, credentialHashHigh] } = CredentialProof();
 ```
 
-- [ ] 11.2 Compile and trusted setup
+- [x] 11.2 Compile and trusted setup
 
 ```bash
 cd circuits
@@ -1678,7 +1678,7 @@ cp build/cred_final.zkey public/circuits/
 cp build/verification_key.json public/circuits/
 ```
 
-- [ ] 11.3 ZK helpers
+- [x] 11.3 ZK helpers
 
 `lib/zk/proof.ts`:
 

@@ -53,3 +53,13 @@ __pycache__/
 
 # Local Solana Ledger
 /test-ledger/
+
+# ZK Proofs
+/circuits/node_modules/
+/circuits/*.ptau
+/circuits/*.r1cs
+/circuits/*.sym
+/circuits/*.zkey
+/circuits/credentialProof_js/
+/circuits/verification_key.json
+/circuits/package-lock.json
