@@ -1708,8 +1708,8 @@ export async function verifyCredentialProof(proof: object, publicSignals: string
 
 ## Phase 12 — ATS Webhook Integrations
 
-- [ ] 12.1 Add ATS verification webhook route
-- [ ] 12.2 Configure webhook events per ATS platform
+- [x] 12.1 Add ATS verification webhook route
+- [x] 12.2 Configure webhook events per ATS platform
 
 `app/api/ats/verify/route.ts`:
 

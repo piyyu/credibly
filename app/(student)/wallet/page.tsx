@@ -20,11 +20,17 @@ export default function WalletPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (publicKey) {
-      const stored = localStorage.getItem(`credibly_${publicKey.toBase58()}`);
-      if (stored) setCredentials(JSON.parse(stored));
-    }
-    setLoading(false);
+    const loadFromStorage = async () => {
+      if (publicKey) {
+        const stored = localStorage.getItem(`credibly_${publicKey.toBase58()}`);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          setCredentials(parsed);
+        }
+      }
+      setLoading(false);
+    };
+    loadFromStorage();
   }, [publicKey]);
 
   if (loading) return null;
