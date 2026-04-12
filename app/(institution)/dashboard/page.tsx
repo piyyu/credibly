@@ -12,9 +12,13 @@ export default function DashboardOverview() {
   const [loadingLogs, setLoadingLogs] = useState(true);
 
   useEffect(() => {
+    if (!publicKey) {
+      setLoadingLogs(false);
+      setRecentLogs([]);
+      return;
+    }
     // Fetch signatures for the institution's public key
     const fetchLogs = async () => {
-      if (!publicKey) return;
       setLoadingLogs(true);
       try {
         const data = await connection.getSignaturesForAddress(publicKey, { limit: 5 });
@@ -84,6 +88,11 @@ export default function DashboardOverview() {
           
           {loadingLogs ? (
             <div className="py-8 text-center text-xs text-gray-400">Loading activity...</div>
+          ) : !publicKey ? (
+            <div className="py-8 text-center text-xs text-gray-400 flex flex-col items-center">
+              <Activity className="w-6 h-6 text-gray-200 mb-2" />
+              Connect your wallet to view recent activity.
+            </div>
           ) : recentLogs.length === 0 ? (
             <div className="py-8 text-center text-xs text-gray-400 flex flex-col items-center">
               <Activity className="w-6 h-6 text-gray-200 mb-2" />

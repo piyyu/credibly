@@ -1,7 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import dynamic from "next/dynamic";
+const WalletMultiButton = dynamic(
+  () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
+  { ssr: false }
+);
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { QrCode, GraduationCap, Building2, Calendar, Fingerprint } from "lucide-react";

@@ -1,7 +1,11 @@
 "use client";
 import { useState } from "react";
 import { useWallet } from "@solana/wallet-adapter-react";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import dynamic from "next/dynamic";
+const WalletMultiButton = dynamic(
+  () => import("@solana/wallet-adapter-react-ui").then((mod) => mod.WalletMultiButton),
+  { ssr: false }
+);
 import { useCrediblyProgram } from "@/lib/solana/client";
 import { issueCredentialOnChain } from "@/lib/solana/credentials";
 import Papa from "papaparse";
