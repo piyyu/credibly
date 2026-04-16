@@ -1,0 +1,35 @@
+{
+  "_comment": "Copy these values into the Single Issue form on /dashboard/issue",
+  "samples": [
+    {
+      "student_did": "did:sol:4zMMC9srt5Ri5X14GAgXhaHii3GnPAEERYPJgZJDncDU",
+      "degree": "B.Tech Computer Science & Engineering",
+      "institution": "Indian Institute of Technology Delhi",
+      "graduation_year": "2026"
+    },
+    {
+      "student_did": "did:sol:6FvJrm8EhxKZgZBqSfJeD3qGdpjkPXmv3FVGhtuJfWi2",
+      "degree": "M.Sc Data Science",
+      "institution": "Indian Institute of Science Bangalore",
+      "graduation_year": "2025"
+    },
+    {
+      "student_did": "did:sol:9WzDXwBbmPQVgHpyTL7NzjKdHdYm4E3JpmCxQFHKyAv5",
+      "degree": "MBA Finance",
+      "institution": "Indian Institute of Management Ahmedabad",
+      "graduation_year": "2026"
+    },
+    {
+      "student_did": "did:sol:3kPXJdN8vC4tqQr5Y9FsSdB7guVpLm2e6GzW1R8HTiZx",
+      "degree": "B.Des Communication Design",
+      "institution": "National Institute of Design Ahmedabad",
+      "graduation_year": "2025"
+    },
+    {
+      "student_did": "did:sol:Hb5qXvUJZkFmPn7Yw3L8N2gTcRAs9DxE4K6VfMi1roaS",
+      "degree": "B.Tech Electrical Engineering",
+      "institution": "Indian Institute of Technology Bombay",
+      "graduation_year": "2024"
+    }
+  ]
+}

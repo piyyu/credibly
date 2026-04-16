@@ -6,13 +6,16 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-credibly = "7hcwWetbM2Xhdk9Tev5cWSEPzijFqmzy6TFYdbEq8nCr"
+credibly = "HYLVH9iBUSroAyDViFn6fY7WirfPuv1kG89TCyvAz5fx"
+
+[programs.devnet]
+credibly = "HYLVH9iBUSroAyDViFn6fY7WirfPuv1kG89TCyvAz5fx"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

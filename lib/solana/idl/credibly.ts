@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/credibly.json`.
  */
 export type Credibly = {
-  "address": "7hcwWetbM2Xhdk9Tev5cWSEPzijFqmzy6TFYdbEq8nCr",
+  "address": "HYLVH9iBUSroAyDViFn6fY7WirfPuv1kG89TCyvAz5fx",
   "metadata": {
     "name": "credibly",
     "version": "0.1.0",
@@ -357,8 +357,13 @@ export type Credibly = {
   "errors": [
     {
       "code": 6000,
-      "name": "unregisteredIssuer",
-      "msg": "Institution not in trust registry"
+      "name": "unauthorized",
+      "msg": "Only the original issuer can revoke"
+    },
+    {
+      "code": 6001,
+      "name": "alreadyRevoked",
+      "msg": "Already revoked"
     }
   ],
   "types": [

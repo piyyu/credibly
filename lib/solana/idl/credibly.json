@@ -1,5 +1,5 @@
 {
-  "address": "7hcwWetbM2Xhdk9Tev5cWSEPzijFqmzy6TFYdbEq8nCr",
+  "address": "HYLVH9iBUSroAyDViFn6fY7WirfPuv1kG89TCyvAz5fx",
   "metadata": {
     "name": "credibly",
     "version": "0.1.0",
@@ -351,8 +351,13 @@
   "errors": [
     {
       "code": 6000,
-      "name": "UnregisteredIssuer",
-      "msg": "Institution not in trust registry"
+      "name": "Unauthorized",
+      "msg": "Only the original issuer can revoke"
+    },
+    {
+      "code": 6001,
+      "name": "AlreadyRevoked",
+      "msg": "Already revoked"
     }
   ],
   "types": [

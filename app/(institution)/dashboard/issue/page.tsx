@@ -9,7 +9,7 @@ const WalletMultiButton = dynamic(
 import { useCrediblyProgram } from "@/lib/solana/client";
 import { issueCredentialOnChain } from "@/lib/solana/credentials";
 import Papa from "papaparse";
-import { UploadCloud, CheckCircle2, XCircle, Loader2, Send, FileSpreadsheet } from "lucide-react";
+import { UploadCloud, CheckCircle2, XCircle, Loader2, Send, FileSpreadsheet, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface CSVRow {
@@ -24,7 +24,7 @@ export default function IssuePage() {
   const program = useCrediblyProgram();
   
   const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
-  const [results, setResults] = useState<{ did: string; status: string; txSig?: string }[]>([]);
+  const [results, setResults] = useState<{ did: string; status: string; txSig?: string; credentialHash?: string }[]>([]);
   const [processing, setProcessing] = useState(false);
 
   // Single form state
@@ -51,8 +51,8 @@ export default function IssuePage() {
           graduationYear: parseInt(graduationYear),
         },
       };
-      const { txSig } = await issueCredentialOnChain(program, publicKey, vc);
-      setResults([{ did: studentDid, status: "Issued", txSig }, ...results]);
+      const { txSig, credentialHash } = await issueCredentialOnChain(program, publicKey, vc);
+      setResults([{ did: studentDid, status: "Issued", txSig, credentialHash }, ...results]);
       
       // Clear form
       setStudentDid("");
@@ -75,7 +75,7 @@ export default function IssuePage() {
       header: true,
       skipEmptyLines: true,
       complete: async ({ data }: { data: CSVRow[] }) => {
-        const batch: { did: string; status: string; txSig?: string }[] = [];
+        const batch: { did: string; status: string; txSig?: string; credentialHash?: string }[] = [];
         for (const row of data) {
           if (!row.student_did) continue;
           try {
@@ -91,8 +91,8 @@ export default function IssuePage() {
                 graduationYear: parseInt(row.graduation_year),
               },
             };
-            const { txSig } = await issueCredentialOnChain(program, publicKey, vc);
-            batch.push({ did: row.student_did, status: "Issued", txSig });
+            const { txSig, credentialHash } = await issueCredentialOnChain(program, publicKey, vc);
+            batch.push({ did: row.student_did, status: "Issued", txSig, credentialHash });
           } catch (err) {
             batch.push({ did: row.student_did, status: `Failed: ${(err as Error).message}` });
           }
@@ -275,11 +275,29 @@ export default function IssuePage() {
                       <span className="font-mono text-gray-500 truncate text-xs w-24 md:w-auto">{r.did}</span>
                       <span className={`text-xs font-medium ml-2 ${ok ? "text-emerald-600" : "text-red-500"}`}>{r.status}</span>
                     </div>
-                    {r.txSig && (
-                      <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer" className="text-xs font-medium text-emerald-600 shrink-0 ml-2 hover:bg-emerald-50 px-2 py-1 rounded transition-colors">
-                        View ↗
-                      </a>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {r.credentialHash && (
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(r.credentialHash!);
+                          }}
+                          title="Copy Credential Hash"
+                          className="hover:bg-gray-100 p-1.5 rounded-md text-gray-500 transition-colors"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                      {r.txSig && (
+                        <a href={`https://explorer.solana.com/tx/${r.txSig}?cluster=devnet`} target="_blank" rel="noreferrer" className="text-xs font-medium text-emerald-600 shrink-0 ml-1 hover:bg-emerald-50 px-2 py-1 rounded transition-colors">
+                          Tx ↗
+                        </a>
+                      )}
+                      {r.credentialHash && (
+                        <a href={`/verify/${r.credentialHash}`} target="_blank" rel="noreferrer" className="text-xs font-medium text-blue-600 shrink-0 hover:bg-blue-50 px-2 py-1 rounded transition-colors">
+                          Verify ↗
+                        </a>
+                      )}
+                    </div>
                   </motion.div>
                 );
               })}

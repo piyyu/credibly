@@ -8,7 +8,7 @@ use credential::*;
 use revocation::*;
 use trust::*;
 
-declare_id!("7hcwWetbM2Xhdk9Tev5cWSEPzijFqmzy6TFYdbEq8nCr");
+declare_id!("HYLVH9iBUSroAyDViFn6fY7WirfPuv1kG89TCyvAz5fx");
 
 #[program]
 pub mod credibly {
