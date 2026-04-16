@@ -8,7 +8,7 @@ const WalletMultiButton = dynamic(
 );
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { QrCode, GraduationCap, Building2, Calendar, Fingerprint } from "lucide-react";
+import { QrCode, GraduationCap, Building2, Calendar, Fingerprint, Copy, Check } from "lucide-react";
 
 interface StoredCredential {
   id: string;
@@ -16,12 +16,21 @@ interface StoredCredential {
   institution: string;
   issuedAt: string;
   credentialHashHex: string;
+  marks?: string;
 }
 
 export default function WalletPage() {
   const { publicKey } = useWallet();
   const [credentials, setCredentials] = useState<StoredCredential[]>([]);
   const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyDid = () => {
+    if (!publicKey) return;
+    navigator.clipboard.writeText(`did:sol:${publicKey.toBase58()}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     const loadFromStorage = async () => {
@@ -61,6 +70,9 @@ export default function WalletPage() {
           <h1 className="text-xl font-semibold text-gray-900 mb-1">My Wallet</h1>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-gray-100 border border-gray-200 text-xs font-mono text-gray-600">
             <span className="text-gray-400">DID:</span> did:sol:{publicKey.toBase58().slice(0, 8)}...{publicKey.toBase58().slice(-6)}
+            <button onClick={handleCopyDid} className="ml-1 text-gray-400 hover:text-gray-600 transition-colors" title="Copy full DID">
+              {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+            </button>
           </div>
         </div>
       </div>
@@ -97,6 +109,12 @@ export default function WalletPage() {
               <div className="flex items-center gap-2 text-xs text-gray-400 mb-5">
                 <Calendar className="w-3.5 h-3.5" />
                 {new Date(cred.issuedAt).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}
+                {cred.marks && (
+                  <>
+                    <span className="mx-1">•</span>
+                    <span className="font-medium text-gray-600">Score: {cred.marks}</span>
+                  </>
+                )}
               </div>
 
               <Link href={`/wallet/share/${cred.credentialHashHex}`} className="flex items-center justify-center gap-2 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-100 rounded-lg transition-colors">

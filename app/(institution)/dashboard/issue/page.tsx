@@ -17,6 +17,7 @@ interface CSVRow {
   degree: string;
   institution: string;
   graduation_year: string;
+  marks: string;
 }
 
 export default function IssuePage() {
@@ -32,10 +33,11 @@ export default function IssuePage() {
   const [degree, setDegree] = useState("");
   const [institution, setInstitution] = useState("");
   const [graduationYear, setGraduationYear] = useState("");
+  const [marks, setMarks] = useState("");
 
   async function handleSingleIssue(e: React.FormEvent) {
     e.preventDefault();
-    if (!publicKey || !program || !studentDid || !degree || !institution || !graduationYear) return;
+    if (!publicKey || !program || !studentDid || !degree || !institution || !graduationYear || !marks) return;
     
     setProcessing(true);
     try {
@@ -49,14 +51,34 @@ export default function IssuePage() {
           degree,
           institution,
           graduationYear: parseInt(graduationYear),
+          marks,
         },
       };
       const { txSig, credentialHash } = await issueCredentialOnChain(program, publicKey, vc);
       setResults([{ did: studentDid, status: "Issued", txSig, credentialHash }, ...results]);
       
+      // Simulate delivery to student wallet
+      try {
+        const studentPubkeyStr = studentDid.replace("did:sol:", "");
+        const studentStorageKey = `credibly_${studentPubkeyStr}`;
+        const existing = JSON.parse(localStorage.getItem(studentStorageKey) || "[]");
+        existing.push({
+          id: credentialHash,
+          degree,
+          institution,
+          marks,
+          issuedAt: new Date().toISOString(),
+          credentialHashHex: credentialHash
+        });
+        localStorage.setItem(studentStorageKey, JSON.stringify(existing));
+      } catch (e) {
+        console.warn("Could not save to mock student wallet", e);
+      }
+      
       // Clear form
       setStudentDid("");
       setDegree("");
+      setMarks("");
       // keep institution
       setGraduationYear("");
     } catch (err) {
@@ -89,10 +111,29 @@ export default function IssuePage() {
                 degree: row.degree,
                 institution: row.institution,
                 graduationYear: parseInt(row.graduation_year),
+                marks: row.marks,
               },
             };
             const { txSig, credentialHash } = await issueCredentialOnChain(program, publicKey, vc);
             batch.push({ did: row.student_did, status: "Issued", txSig, credentialHash });
+            
+            // Simulate delivery to student wallet
+            try {
+              const studentPubkeyStr = row.student_did.replace("did:sol:", "");
+              const studentStorageKey = `credibly_${studentPubkeyStr}`;
+              const existing = JSON.parse(localStorage.getItem(studentStorageKey) || "[]");
+              existing.push({
+                id: credentialHash,
+                degree: row.degree,
+                institution: row.institution,
+                marks: row.marks,
+                issuedAt: new Date().toISOString(),
+                credentialHashHex: credentialHash
+              });
+              localStorage.setItem(studentStorageKey, JSON.stringify(existing));
+            } catch (e) {
+              console.warn("Could not save to mock student wallet", e);
+            }
           } catch (err) {
             batch.push({ did: row.student_did, status: `Failed: ${(err as Error).message}` });
           }
@@ -197,7 +238,7 @@ export default function IssuePage() {
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 transition-all font-mono"
                   />
                 </div>
-                <div className="col-span-2">
+                <div className="col-span-2 md:col-span-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">Institution Name</label>
                   <input
                     required
@@ -206,6 +247,17 @@ export default function IssuePage() {
                     value={institution}
                     onChange={(e) => setInstitution(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 transition-all"
+                  />
+                </div>
+                <div className="col-span-2 md:col-span-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Marks or CGPA</label>
+                  <input
+                    required
+                    type="text"
+                    placeholder="e.g. 9.2 CGPA or 85%"
+                    value={marks}
+                    onChange={(e) => setMarks(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-900 text-sm focus:outline-none focus:border-emerald-300 focus:ring-2 focus:ring-emerald-100 transition-all font-mono"
                   />
                 </div>
               </div>
@@ -238,12 +290,13 @@ export default function IssuePage() {
                 <UploadCloud className="w-6 h-6 text-gray-400 group-hover:text-emerald-600 transition-colors" />
               </div>
               <h3 className="text-sm font-semibold text-gray-900 mb-1">Upload CSV Matrix</h3>
-              <p className="text-xs text-gray-500 mb-4 max-w-xs mx-auto leading-relaxed">
+              <p className="text-xs text-gray-500 mb-4 max-w-sm mx-auto leading-relaxed">
                 Provide a CSV with headers:<br/>
                 <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px] mx-0.5">student_did</code>
                 <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px] mx-0.5">degree</code>
                 <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px] mx-0.5">institution</code>
                 <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px] mx-0.5">graduation_year</code>
+                <code className="bg-gray-100 px-1 py-0.5 rounded text-gray-700 text-[11px] mx-0.5">marks</code>
               </p>
               <span className="inline-flex px-4 py-2 text-sm font-medium bg-gray-900 text-white rounded-lg">Select File</span>
               <input type="file" accept=".csv" onChange={handleCSVUpload} disabled={processing} className="hidden" />

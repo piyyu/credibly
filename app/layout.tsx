@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { WalletProviders } from "@/components/wallet/WalletProviders";
 import { QueryProvider } from "@/components/QueryProvider";
 import Link from "next/link";
-import { ClientWalletButton } from "@/components/wallet/ClientWalletButton";
+import { Navbar } from "@/components/layout/Navbar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans-apply" });
 
@@ -19,26 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased flex flex-col min-h-screen">
         <QueryProvider>
           <WalletProviders>
-            <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
-              <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-                <Link href="/" className="flex items-center gap-2.5 text-gray-900">
-                  <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">C</span>
-                  </div>
-                  <span className="text-lg font-semibold tracking-tight">Credibly</span>
-                </Link>
-
-                <div className="hidden md:flex items-center gap-1">
-                  <Link href="/dashboard" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">Dashboard</Link>
-                  <Link href="/wallet" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">Wallet</Link>
-                  <Link href="/verify" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">Verify</Link>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <ClientWalletButton className="!bg-gray-900 hover:!bg-gray-800 !text-white !font-medium !rounded-lg !h-9 !text-sm !px-4 transition-all" />
-                </div>
-              </div>
-            </nav>
+            <Navbar />
 
             <main className="flex-1 flex flex-col">{children}</main>
 

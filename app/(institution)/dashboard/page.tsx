@@ -101,13 +101,13 @@ export default function DashboardOverview() {
           ) : (
             <div className="space-y-3">
               {recentLogs.map((log) => (
-                <div key={log.signature} className="flex justify-between items-center p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-2 h-2 rounded-full ${log.err ? 'bg-red-400' : 'bg-emerald-400'}`} />
-                    <div className="font-mono text-[11px] text-gray-600">{log.signature.substring(0, 24)}...</div>
+                <div key={log.signature} className="flex justify-between items-center p-3 rounded-lg border border-gray-100 hover:bg-gray-50 transition-colors gap-3 overflow-hidden">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-2 h-2 rounded-full shrink-0 ${log.err ? 'bg-red-400' : 'bg-emerald-400'}`} />
+                    <div className="font-mono text-[11px] text-gray-600 truncate">{log.signature}</div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[10px] text-gray-400">
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="text-[10px] text-gray-400 hidden sm:inline">
                       {log.blockTime ? new Date(log.blockTime * 1000).toLocaleTimeString() : "Pending"}
                     </span>
                     <a href={`https://explorer.solana.com/tx/${log.signature}?cluster=devnet`} target="_blank" rel="noreferrer" className="text-emerald-600 hover:bg-emerald-50 px-1.5 py-0.5 rounded text-[10px] font-semibold transition-colors">
